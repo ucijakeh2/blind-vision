@@ -2,6 +2,7 @@ import { Text, View } from "react-native";
 import * as React from 'react';
 import { PaperProvider } from 'react-native-paper';
 import { ActivityIndicator, MD2Colors } from 'react-native-paper';
+import { Link } from "expo-router";
 
 export default function Index() {
   return (
@@ -14,6 +15,7 @@ export default function Index() {
         }}
       >
         <Text className="text-red-500 text-2xl font-bold">Edit app/index.tsx to edit this screen.</Text>
+        <Link href="/sign-in">Go to auth</Link>
       </View>
       <ActivityIndicator animating={true} color={MD2Colors.red800} />
     </PaperProvider>
