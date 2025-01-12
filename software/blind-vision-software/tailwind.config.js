@@ -6,7 +6,7 @@ module.exports = {
       colors: {
         linkBlue: "#0059FF",
         buttonBlue: "#2AB2DB",
-        buttonGreem: "#0D9276"
+        buttonGreen: "#0D9276"
       }
     },
   },

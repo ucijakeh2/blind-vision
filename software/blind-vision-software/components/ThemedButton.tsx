@@ -13,7 +13,13 @@ interface ThemedButtonProps {
 
 const ThemedButton: React.FC<ThemedButtonProps> = ({ style = "", icon = "", text, textColor = "black", trigger }) => {
     return ( 
-        <Button className={`mb-6 ${style}`} mode="elevated" onPress={() => trigger(true)} icon={icon || ""} textColor={textColor}>
+        <Button 
+            className={`mb-6 ${style}`} 
+            mode="elevated" 
+            onPress={() => trigger(true)} 
+            icon={icon || ""} 
+            textColor={textColor}
+        >
             {text}
         </Button>
     )
