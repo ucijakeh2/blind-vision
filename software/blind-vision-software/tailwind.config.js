@@ -4,9 +4,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primaryBlue: "#40A2E3",
-        transitionBlueGreen: "#81DCD4",
-        primaryGreen: "#0D9276",
+        linkBlue: "#0059FF",
+        buttonBlue: "#2AB2DB",
+        buttonGreem: "#0D9276"
       }
     },
   },
