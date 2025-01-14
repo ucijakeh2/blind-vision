@@ -55,6 +55,8 @@ void us_calibrate()
 
   delay(100);
 
+  LOG("US: calibration completed");
+
 }
 
 void us_init()
@@ -67,5 +69,7 @@ void us_init()
   pinMode(US_TX, INPUT);
 
   digitalWrite(US_RX, HIGH);
+
+  LOG("US: initialization completed");
 
 }
