@@ -6,7 +6,9 @@ module.exports = {
       colors: {
         linkBlue: "#0059FF",
         buttonBlue: "#2AB2DB",
-        buttonGreen: "#0D9276"
+        buttonGreen: "#0D9276",
+        disconnectedRed: "#FF0400",
+        connectedGreen: "#0DFF00"
       }
     },
   },

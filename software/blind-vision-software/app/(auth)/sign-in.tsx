@@ -3,9 +3,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState } from "react";
 import { Link, Redirect, useRouter } from "expo-router";
 
-import ThemedTextInput from "@/components/ThemedTextInput";
-import ThemedButton from "@/components/ThemedButton";
-import AuthLabel from "@/components/AuthLabel";
+import ThemedTextInput from "@/components/auth/ThemedTextInput";
+import ThemedButton from "@/components/auth/ThemedButton";
+import AuthLabel from "@/components/auth/AuthLabel";
 import utils from "@/constants/utils"
 
 export default function SignIn() {
@@ -14,20 +14,13 @@ export default function SignIn() {
     const [password, setPassword] = useState("");
     const [reqLogIn, setLogIn] = useState(false);
 
-
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.container}>
                 <LinearGradient 
                     colors={['#40A2E3', '#81DCD4']} 
-                    start={{
-                        x: 0,
-                        y: 0
-                    }}
-                    end={{
-                        x: 1,
-                        y: 0
-                    }}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
                     style={styles.container}
                 >
                     <AuthLabel text="Sign In"/>
@@ -95,8 +88,7 @@ export default function SignIn() {
 
 const styles = StyleSheet.create({
     container: {
-        height: "100%",
-        backgroundColor: "black"
+        height: "100%"
     },
     link: {
         color: "#0059FF",
