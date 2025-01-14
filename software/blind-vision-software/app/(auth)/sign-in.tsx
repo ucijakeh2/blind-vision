@@ -1,7 +1,7 @@
 import { Keyboard, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState } from "react";
-import { Link } from "expo-router";
+import { Link, Redirect, useRouter } from "expo-router";
 
 import ThemedTextInput from "@/components/ThemedTextInput";
 import ThemedButton from "@/components/ThemedButton";
@@ -9,16 +9,11 @@ import AuthLabel from "@/components/AuthLabel";
 import utils from "@/constants/utils"
 
 export default function SignIn() {
+    const router = useRouter()
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [reqLogIn, setLogIn] = useState(false);
 
-    useEffect(() => {
-        if(reqLogIn) {
-            console.log(email, password)
-            setLogIn(false)
-        }
-    }, [reqLogIn])
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -53,7 +48,7 @@ export default function SignIn() {
                                     outlineColor="#1D8AFE"
                                 />
                                 <ThemedButton 
-                                    style="bg-buttonBlue rounded"
+                                    customNativeWind="bg-buttonBlue rounded"
                                     text="Log In"
                                     textColor="white"
                                     trigger={setLogIn}
@@ -70,14 +65,14 @@ export default function SignIn() {
                                 <View className="mt-6 flex flex-row justify-around">
                                     {/* In-progess: this button is not working yet */}
                                     <ThemedButton 
-                                        style={utils.foreignAuthButtonStyle}
+                                        customNativeWind={utils.foreignAuthButtonStyle}
                                         text="Google"
                                         icon="google"
                                         trigger={() => {}}
                                         />
                                     {/* In-progess: this button is not working yet */}
                                     <ThemedButton
-                                        style={utils.foreignAuthButtonStyle}
+                                        customNativeWind={utils.foreignAuthButtonStyle}
                                         text="Facebook"
                                         icon="facebook"
                                         trigger={() => {}}

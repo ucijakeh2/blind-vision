@@ -68,7 +68,7 @@ export default function SignIn() {
                                     outlineColor="#699F89"
                                 />
                                 <ThemedButton 
-                                    style="bg-buttonGreen rounded"
+                                    customNativeWind="bg-buttonGreen rounded"
                                     text="Sign Up"
                                     textColor="white"
                                     trigger={setSignUp}
@@ -78,14 +78,14 @@ export default function SignIn() {
                                 <View className="mt-6 flex flex-row justify-around">
                                     {/* In-progess: this button is not working yet */}
                                     <ThemedButton 
-                                        style={utils.foreignAuthButtonStyle}
+                                        customNativeWind={utils.foreignAuthButtonStyle}
                                         text="Google"
                                         icon="google"
                                         trigger={() => {}}
                                         />
                                     {/* In-progess: this button is not working yet */}
                                     <ThemedButton
-                                        style={utils.foreignAuthButtonStyle}
+                                        customNativeWind={utils.foreignAuthButtonStyle}
                                         text="Facebook"
                                         icon="facebook"
                                         trigger={() => {}}

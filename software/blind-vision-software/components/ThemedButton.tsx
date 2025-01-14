@@ -4,21 +4,28 @@ import { type Dispatch, type SetStateAction } from 'react'
 import utils from '@/constants/utils'
 
 interface ThemedButtonProps {
-    style?: string
+    customNativeWind?: string
     icon?: string
     textColor?: string,
     text: string,
     trigger: Dispatch<SetStateAction<boolean>>
 }
 
-const ThemedButton: React.FC<ThemedButtonProps> = ({ style = "", icon = "", text, textColor = "black", trigger }) => {
+const ThemedButton: React.FC<ThemedButtonProps> = ({ 
+    customNativeWind = "", 
+    icon = "", 
+    textColor = "black", 
+    text, 
+    trigger,
+    ...props }) => {
     return ( 
         <Button 
-            className={`mb-6 ${style}`} 
+            className={`mb-6 ${customNativeWind}`} 
             mode="elevated" 
             onPress={() => trigger(true)} 
             icon={icon || ""} 
             textColor={textColor}
+            {...props}
         >
             {text}
         </Button>

@@ -2,9 +2,13 @@ import { Text, View } from "react-native";
 import * as React from 'react';
 import { PaperProvider } from 'react-native-paper';
 import { ActivityIndicator, MD2Colors } from 'react-native-paper';
-import { Link } from "expo-router";
+import { Link, Redirect } from "expo-router";
 
 export default function Index() {
+  
+  // In-progress: this should be changed to if user logged in
+  if (true) {return <Redirect href="/(tabs)/home"/>}
+
   return (
     <PaperProvider>
       <View
