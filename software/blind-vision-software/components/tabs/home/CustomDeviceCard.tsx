@@ -1,13 +1,11 @@
-import { View, Text, Image } from 'react-native'
-import React, { useState } from 'react'
-import { Button } from 'react-native-paper'
-import { Link, type LinkProps } from 'expo-router'
 import { LinearGradient } from 'expo-linear-gradient'
-import ConnectBanner from './ConnectBanner'
-import DisconnectBanner from './DisconnectBanner'
-import images from "@/constants/images"
-import CustomSlider from './CustomSlider'
+import { Link, type LinkProps } from 'expo-router'
+import { Button } from 'react-native-paper'
+import { View, Image } from 'react-native'
+import { useState } from 'react'
 
+import CustomSlider from './CustomSlider'
+import CustomBanner from './CustomBanner'
 
 interface CustomDeviceCardProps {
     deviceName: string,
@@ -35,7 +33,7 @@ const CustomDeviceCard: React.FC<CustomDeviceCardProps> = ({
         <CustomSlider value={value} setValue={setValue}/>
         <Image className='absolute right-0 top-1/4' source={imageSource}/>
         <View className='h-full flex-1 flex flex-col items-end justify-between ml-6'>
-          {connected ? <ConnectBanner/> : <DisconnectBanner/>}
+          <CustomBanner connected={connected}/>
           <Link href="/(tabs)/settings" asChild>
             <Button
               className="border-white w-full"

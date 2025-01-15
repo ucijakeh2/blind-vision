@@ -58,14 +58,14 @@ export default function SignIn() {
                                 <View className="mt-6 flex flex-row justify-around">
                                     {/* In-progess: this button is not working yet */}
                                     <ThemedButton 
-                                        customNativeWind={utils.foreignAuthButtonStyle}
+                                        customNativeWind={utils.styles.auth.foreignAuthButton}
                                         text="Google"
                                         icon="google"
                                         trigger={() => {}}
                                         />
                                     {/* In-progess: this button is not working yet */}
                                     <ThemedButton
-                                        customNativeWind={utils.foreignAuthButtonStyle}
+                                        customNativeWind={utils.styles.auth.foreignAuthButton}
                                         text="Facebook"
                                         icon="facebook"
                                         trigger={() => {}}

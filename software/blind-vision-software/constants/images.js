@@ -1,10 +1,7 @@
-import glasses from "../assets/images/glasses.png"
-import blindStick from "../assets/images/blind-stick.png"
-
-import homeBackground from "../assets/images/home-background.png"
+import glasses from "../assets/images/home/glasses.png"
+import blindStick from "../assets/images/home/blind-stick.png"
 
 export default {
     glasses,
-    blindStick,
-    homeBackground
+    blindStick
 }

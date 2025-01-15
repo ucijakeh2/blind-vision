@@ -1,19 +1,22 @@
-import { Image, Text, View } from "react-native";
-import { useFocusEffect, useNavigation } from "expo-router";
-import { useRouter } from 'expo-router';
-import { useEffect } from "react";
-import CustomDeviceCard from "@/components/tabs/home/CustomDeviceCard";
 import { SafeAreaView } from "react-native-safe-area-context";
-import images from "@/constants/images";
-import AuthLabel from "@/components/auth/AuthLabel";
+import { Image } from "react-native";
+
+import CustomDeviceCard from "@/components/tabs/home/CustomDeviceCard";
 import HomeLabel from "@/components/tabs/home/HomeLabel";
+
+import backgrounds from "@/constants/backgrounds";
+import images from "@/constants/images";
+import utils from "@/constants/utils";
 
 
 export default function Home() {
 
     return (
-        <SafeAreaView className="h-full bg-white flex flex-col items-center justify-end">
-            <Image className="absolute top-0" source={images.homeBackground}/>
+        <SafeAreaView className={utils.styles.tabs.safeAreaViewStyle}>
+            <Image 
+                className={utils.styles.tabs.headerImageStyle} 
+                source={backgrounds.home}
+            />
             <HomeLabel firstName="Huy"/>
             <CustomDeviceCard
                 deviceName="Glasses"

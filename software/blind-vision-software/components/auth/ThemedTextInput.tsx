@@ -1,6 +1,5 @@
-import React from 'react'
-import { TextInput } from 'react-native-paper'
 import { type Dispatch, type SetStateAction } from 'react'
+import { TextInput } from 'react-native-paper'
 
 interface ThemedTextInputProps {
     style?: string,
@@ -14,7 +13,7 @@ const ThemedTextInput: React.FC<ThemedTextInputProps> = ({ style = "", outlineCo
     // In-progess: background under label still has the wrong color
     return ( 
         <TextInput 
-            className={`mb-6 ${style}`}
+            className={`mb-6 bg-white ${style}`}
             mode="outlined" 
             label={label}
             value={text}

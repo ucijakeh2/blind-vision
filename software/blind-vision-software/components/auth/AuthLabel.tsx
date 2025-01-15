@@ -10,7 +10,7 @@ const AuthLabel: React.FC<AuthLabelProps> = ({ text }) => {
     <View className="mx-auto w-11/12 flex flex-row items-end h-1/5 pb-4">
         <View className="w-full flex flex-row justify-between">
             <Text className="text-5xl text-white font-bold mb-0">{text}</Text>
-            <Image source={logo.authLogo}/>
+            <Image source={logo.auth}/>
         </View>
     </View>
   )

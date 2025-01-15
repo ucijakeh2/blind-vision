@@ -1,7 +1,5 @@
-import React from 'react'
-import { Button, TextInput } from 'react-native-paper'
 import { type Dispatch, type SetStateAction } from 'react'
-import utils from '@/constants/utils'
+import { Button } from 'react-native-paper'
 
 interface ThemedButtonProps {
     customNativeWind?: string

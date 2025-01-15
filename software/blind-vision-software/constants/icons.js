@@ -1,13 +1,13 @@
-import home from "../assets/icons/home.png"
-import maps from "../assets/icons/maps.png"
-import settings from "../assets/icons/settings.png"
-import google from "../assets/icons/google.png"
-import facebook from "../assets/icons/facebook.png"
+import home from "../assets/icons/(tabs)/home.png"
+import maps from "../assets/icons/(tabs)/maps.png"
+import settings from "../assets/icons/(tabs)/settings.png"
+
+import rightArrow from "../assets/icons/settings/right-arrow.png"
 
 export default {
     home,
     maps,
     settings,
-    google,
-    facebook
+
+    rightArrow
 }
