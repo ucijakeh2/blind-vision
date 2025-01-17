@@ -73,3 +73,50 @@ void us_init()
   LOG("US: initialization completed");
 
 }
+
+uint16_t us_read_scaled()
+{
+  constexpr uint16_t SENSOR_RESOLUTION = 512;
+  uint16_t l_unscaled = analogRead(US_AN);
+  return (l_unscaled * SENSOR_RESOLUTION) / ESP32_ANALOG_RESOLUTION;
+}
+
+uint8_t  us_read_useful()
+{
+  // THIS FUNCTION CONVERTS SENSOR DISTANCE INTO
+  //     USEFUL UNITS
+  // 
+  // UNIT SPEC: (0-255),
+  //     0   means obstacle is far enough away to be irrelevant   ( actuator cutoff      )
+  //     255 means obstacle is as close as we deem useful         ( saturating actuators )
+  //
+
+  constexpr uint8_t MAX_USEFUL_DISTANCE_IN = 120;
+  constexpr uint8_t MIN_USEFUL_DISTANCE_IN = 12;
+
+  // there is a 1-1 correspondance between inches and Vcc/512, per US datasheet.
+  constexpr uint16_t MAX_USEFUL = MAX_USEFUL_DISTANCE_IN;
+  constexpr uint16_t MIN_USEFUL = MIN_USEFUL_DISTANCE_IN;
+  constexpr uint16_t USEFUL_RANGE = MAX_USEFUL - MIN_USEFUL;
+
+  // read in raw value
+  uint16_t l_raw = us_read_scaled();
+
+  // clip the raw value to being within the useful range
+  uint16_t l_capped = min(MAX_USEFUL, max(MIN_USEFUL, l_raw));
+
+  // moving the minimum possible sample down to zero (this will make the maximum downshifted sample=USEFUL_RANGE)
+  uint16_t l_downshifted = l_capped - MIN_USEFUL;
+
+  // accounts for inverse-distance. closer obstacles should yield higher values for actuator control
+  uint16_t l_compliment = USEFUL_RANGE - l_downshifted;
+
+  // scales every value to range 0-1.
+  double l_ratio = (double)l_compliment / (double)USEFUL_RANGE;
+
+  // construct the resulting value
+  uint8_t l_result = l_ratio * 255;
+
+  return l_result;
+
+}

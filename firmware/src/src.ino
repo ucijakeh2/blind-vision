@@ -18,15 +18,10 @@ void setup() {
 }
 
 void loop() {
-  static int led_state = 0;
-  int val = analogRead(US_AN);
-  int max_val = 2000;
-  double converted = (double)(max_val - val) / (double)max_val;
-  Serial.println(converted);
-  digitalWrite(LED_PIN, led_state);
-  analogWrite(VIBRATOR_PIN, 0 * converted);
-  delay(250);
-  led_state = !led_state;
+  uint8_t l_useful = us_read_useful();
+  Serial.println(l_useful);
+  analogWrite(LED_PIN, l_useful);
+  delay(50);
 }
 
 // TEST_US
