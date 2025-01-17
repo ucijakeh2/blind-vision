@@ -1,6 +1,10 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+// ESP32NANO DATASHEET: https://docs.arduino.cc/resources/datasheets/ABX00083-datasheet.pdf
+
+#define TEST_US 1
+
 #define DEBUG 1
 
 ///////////////////////////////////////////////////////////
