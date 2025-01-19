@@ -6,27 +6,27 @@ import HomeLabel from "@/components/tabs/home/HomeLabel";
 
 import backgrounds from "@/constants/backgrounds";
 import images from "@/constants/images";
-import utils from "@/constants/utils";
+import styles from "@/constants/styles";
 
 
 export default function Home() {
 
     return (
-        <SafeAreaView className={utils.styles.tabs.safeAreaViewStyle}>
+        <SafeAreaView className={styles.tabs.safeAreaViewStyle}>
             <Image 
-                className={utils.styles.tabs.headerImageStyle} 
+                className={styles.tabs.headerImageStyle} 
                 source={backgrounds.home}
             />
             <HomeLabel firstName="Huy"/>
             <CustomDeviceCard
                 deviceName="Glasses"
-                destination="/(tabs)/maps"
+                destination="/settings/glasses"
                 connected={true}
                 imageSource={images.glasses}
             />
             <CustomDeviceCard
                 deviceName="Stick"
-                destination="/(tabs)/settings"
+                destination="/settings/stick"
                 connected={false}
                 imageSource={images.blindStick}
             />

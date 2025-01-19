@@ -2,20 +2,33 @@ import { RelativePathString, useRouter } from 'expo-router'
 import { Icon, List, Switch } from 'react-native-paper'
 import { View } from 'react-native'
 
+import LayoutObject from '@/constants/types/LayoutObject'
 import icons from '@/constants/icons'
-
-interface LayoutObject {
-  title: string,
-  imageSource: object,
-  destination: string | null
-}
+import CustomBanner from '../home/CustomBanner'
 
 interface CustomListProps {
   layout: Array<LayoutObject>
 }
 
+const RightArrow = () => {
+  return (
+    <View className='my-auto'>
+      <Icon source={icons.rightArrow} size={20}/>
+    </View>
+  )
+}
+
 const CustomList: React.FC<CustomListProps> = ({ layout }) => {
   const router = useRouter()
+
+  const chooseRightIcon = ( destination: string | null, status: boolean ) => {
+    if (destination) {
+      return <RightArrow/>
+    } else if (status) {
+      return <CustomBanner connected/>
+    } else { return <Switch/> }
+  }
+
   // In-progess: Switch is not working
   return (
     <List.Section>
@@ -26,19 +39,10 @@ const CustomList: React.FC<CustomListProps> = ({ layout }) => {
           titleStyle={{ color: "black", fontSize: 20, fontWeight: 500 }}
           left={() => (
             <View className='my-auto'>
-              <Icon source={obj.imageSource} size={25} color="grey" />
+              <Icon source={obj.imageSource} size={25} color="black"/>
             </View>
           )}
-          right={() => (
-            <> 
-              { obj.destination ?
-                <View className='my-auto'>
-                  <Icon source={icons.rightArrow} size={20}/>
-                </View>:
-                <Switch />
-              } 
-            </>
-          )}
+          right={() => (chooseRightIcon(obj.destination, obj.showStatus))}
           style={{ borderBottomWidth: 1, borderBottomColor: "#BFBFBF", paddingLeft: 20, paddingVertical: 15 }}
           onPress={() => { if(obj.destination) { router.push(obj.destination as RelativePathString) }}}
         />

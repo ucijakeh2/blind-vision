@@ -6,7 +6,8 @@ import { Link, useRouter } from "expo-router";
 import ThemedTextInput from "@/components/auth/ThemedTextInput";
 import ThemedButton from "@/components/auth/ThemedButton";
 import AuthLabel from "@/components/auth/AuthLabel";
-import utils from "@/constants/utils"
+
+import styles from "@/constants/styles";
 
 export default function SignIn() {
     const router = useRouter()
@@ -25,7 +26,7 @@ export default function SignIn() {
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={styles.container}>
+            <View style={styleSheet.container}>
                 <LinearGradient 
                     colors={['#81DCD4', "#0D9276"]} 
                     start={{
@@ -36,7 +37,7 @@ export default function SignIn() {
                         x: 1,
                         y: 0
                     }}
-                    style={styles.container}
+                    style={styleSheet.container}
                 >
                     <AuthLabel text="Sign Up"/>
                     <View className="h-4/5 w-full absolute bottom-0">
@@ -78,14 +79,14 @@ export default function SignIn() {
                                 <View className="mt-6 flex flex-row justify-around">
                                     {/* In-progess: this button is not working yet */}
                                     <ThemedButton 
-                                        customNativeWind={utils.styles.auth.foreignAuthButton}
+                                        customNativeWind={styles.auth.foreignAuthButton}
                                         text="Google"
                                         icon="google"
                                         trigger={() => {}}
                                         />
                                     {/* In-progess: this button is not working yet */}
                                     <ThemedButton
-                                        customNativeWind={utils.styles.auth.foreignAuthButton}
+                                        customNativeWind={styles.auth.foreignAuthButton}
                                         text="Facebook"
                                         icon="facebook"
                                         trigger={() => {}}
@@ -93,7 +94,7 @@ export default function SignIn() {
                                 </View>
                                 <Text className="mx-auto">
                                     Already have an account?{" "}
-                                    <Link href="/sign-in" style={styles.link} onPress={() => router.dismiss()}>
+                                    <Link href="/sign-in" style={styleSheet.link} onPress={() => router.dismiss()}>
                                         Log In
                                     </Link>
                                 </Text>
@@ -106,7 +107,7 @@ export default function SignIn() {
     )
 }
 
-const styles = StyleSheet.create({
+const styleSheet = StyleSheet.create({
     container: {
         height: "100%"
     },

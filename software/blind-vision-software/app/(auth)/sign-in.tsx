@@ -1,12 +1,13 @@
 import { Keyboard, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
-import { useEffect, useState } from "react";
-import { Link, Redirect, useRouter } from "expo-router";
+import { Link, useRouter } from "expo-router";
+import { useState } from "react";
 
 import ThemedTextInput from "@/components/auth/ThemedTextInput";
 import ThemedButton from "@/components/auth/ThemedButton";
 import AuthLabel from "@/components/auth/AuthLabel";
-import utils from "@/constants/utils"
+
+import styles from "@/constants/styles";
 
 export default function SignIn() {
     const router = useRouter()
@@ -16,12 +17,12 @@ export default function SignIn() {
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={styles.container}>
+            <View style={styleSheet.container}>
                 <LinearGradient 
                     colors={['#40A2E3', '#81DCD4']} 
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 0 }}
-                    style={styles.container}
+                    style={styleSheet.container}
                 >
                     <AuthLabel text="Sign In"/>
                     <View className="h-4/5 w-full absolute bottom-0">
@@ -49,7 +50,7 @@ export default function SignIn() {
                                 <Text className="mb-6 mx-auto">
                                     {/* In-progess: this button is not working yet */}
                                     Forgot Password?{" "}
-                                    <Link style={styles.link} href={"/"}>
+                                    <Link style={styleSheet.link} href={"/"}>
                                         Reset Password
                                     </Link>
                                 </Text>
@@ -58,14 +59,14 @@ export default function SignIn() {
                                 <View className="mt-6 flex flex-row justify-around">
                                     {/* In-progess: this button is not working yet */}
                                     <ThemedButton 
-                                        customNativeWind={utils.styles.auth.foreignAuthButton}
+                                        customNativeWind={styles.auth.foreignAuthButton}
                                         text="Google"
                                         icon="google"
                                         trigger={() => {}}
                                         />
                                     {/* In-progess: this button is not working yet */}
                                     <ThemedButton
-                                        customNativeWind={utils.styles.auth.foreignAuthButton}
+                                        customNativeWind={styles.auth.foreignAuthButton}
                                         text="Facebook"
                                         icon="facebook"
                                         trigger={() => {}}
@@ -73,7 +74,7 @@ export default function SignIn() {
                                 </View>
                                 <Text className="mx-auto">
                                     Don't have an account?{" "}
-                                    <Link style={styles.link} href={"/(auth)/sign-up"}>
+                                    <Link style={styleSheet.link} href={"/(auth)/sign-up"}>
                                         Create an account
                                     </Link>
                                 </Text>
@@ -86,7 +87,7 @@ export default function SignIn() {
     )
 }
 
-const styles = StyleSheet.create({
+const styleSheet = StyleSheet.create({
     container: {
         height: "100%"
     },
