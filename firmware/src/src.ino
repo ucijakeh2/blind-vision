@@ -9,7 +9,7 @@ void setup() {
   Serial.begin(9600);
   sleep(2);
   LOG("----------------");
-  LOG("DEVICE BOOTED UP");
+  LOG("TESTING ULTRASONIC");
   LOG("----------------");
   pinMode(LED_PIN, OUTPUT);
   us_init();
@@ -20,7 +20,7 @@ void setup() {
 void loop() {
   uint8_t l_useful = us_read_useful();
   Serial.println(l_useful);
-  analogWrite(LED_PIN, l_useful);
+  // analogWrite(LED_PIN, l_useful);
   delay(50);
 }
 

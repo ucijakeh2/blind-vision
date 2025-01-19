@@ -61,7 +61,7 @@ void us_calibrate()
 
 void us_init()
 {
-  us_calibrate();
+  // us_calibrate();
   // set pin modes for use
   pinMode(US_RX, OUTPUT);
   pinMode(US_AN, INPUT);
