@@ -13,7 +13,7 @@
 #define TEST_US 1
 #define TEST_VA 0
 #define GLASSES 1
-#define DEBUG 1
+#define DEBUG   1
 
 ///////////////////////////////////////////////////////////
 ///////////////// SERIAL-LOG DEFINITION ///////////////////
