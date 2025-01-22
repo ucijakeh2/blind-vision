@@ -18,16 +18,37 @@ void setup() {
 }
 
 void loop() {
-  uint8_t l_useful = us_read_useful();
-  Serial.println(l_useful);
-  // analogWrite(LED_PIN, l_useful);
+  Serial.println(us_read_useful());
   delay(50);
 }
 
 // TEST_US
-#else
+#elif TEST_VA
 ///////////////////////////////////////////////////////////
-////////////////// GENERIC RELEASE MAIN ///////////////////
+////////////// VIBRATING ACTUATOR TEST MAIN ///////////////
+///////////////////////////////////////////////////////////
+
+void setup() {
+  Serial.begin(9600);
+  sleep(2);
+  LOG("----------------");
+  LOG("TESTING VIBRATING ACTUATOR");
+  LOG("----------------");
+  pinMode(LED_PIN, OUTPUT);
+  va_init();
+  sleep(1);
+}
+
+void loop() {
+  static uint8_t l_drive_amount = 0;
+  va_drive(l_drive_amount++);
+  delay(50);
+}
+
+// TEST_VA
+#elif GLASSES
+///////////////////////////////////////////////////////////
+//////////// GENERIC RELEASE MAIN - GLASSES ///////////////
 ///////////////////////////////////////////////////////////
 
 void setup() {
@@ -40,15 +61,19 @@ void setup() {
   us_init();
   va_init();
   sleep(1);
-  va_drive(0);
 }
 
 void loop() {
-  static int led_state = 0;
-  Serial.println(analogRead(US_AN));
-  digitalWrite(LED_PIN, led_state);
-  delay(250);
-  led_state = !led_state;
+  va_drive(us_read_useful());
+  delay(50);
 }
+
+// GLASSES
+#else
+///////////////////////////////////////////////////////////
+///////////// GENERIC RELEASE MAIN - STICK ////////////////
+///////////////////////////////////////////////////////////
+
+
 
 #endif 

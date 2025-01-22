@@ -91,8 +91,17 @@ uint8_t  us_read_useful()
   //     255 means obstacle is as close as we deem useful         ( saturating actuators )
   //
 
-  constexpr uint8_t MAX_USEFUL_DISTANCE_IN = 120;
+  #if GLASSES
+
+  constexpr uint8_t MAX_USEFUL_DISTANCE_IN = 96;
   constexpr uint8_t MIN_USEFUL_DISTANCE_IN = 12;
+
+  #else
+
+  constexpr uint8_t MAX_USEFUL_DISTANCE_IN = 72;
+  constexpr uint8_t MIN_USEFUL_DISTANCE_IN = 12;
+
+  #endif
 
   // there is a 1-1 correspondance between inches and Vcc/512, per US datasheet.
   constexpr uint16_t MAX_USEFUL = MAX_USEFUL_DISTANCE_IN;
