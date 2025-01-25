@@ -22,16 +22,16 @@ const CustomSlider: React.FC<CustomSliderProps> = ({ value, setValue }) => {
         maximumTrackTintColor="#EAEAEA"
         showIndicator
         renderIndicator={() => (
-        <View
-            style={{
-            height: 40,
-            width: 40,
-            justifyContent: 'center',
-            alignItems: 'center',
-            }}
-        >
-            <Text style={{ color: '#ffffff' }}>{value}</Text>
-        </View>
+          <View
+              style={{
+              height: 40,
+              width: 40,
+              justifyContent: 'center',
+              alignItems: 'center',
+              }}
+          >
+              <Text style={{ color: '#ffffff' }}>{value}</Text>
+          </View>
         )}
         containerStyle={{ borderRadius: 50 }}
         sliderStyle={{ borderRadius: 50 }}

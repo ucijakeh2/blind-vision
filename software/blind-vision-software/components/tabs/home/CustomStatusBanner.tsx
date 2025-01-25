@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native'
 
-const CustomBanner: React.FC<{ connected?: boolean }> = ({ connected = false }) => {
+const CustomStatusBanner: React.FC<{ connected?: boolean }> = ({ connected = false }) => {
   return (
     <View className='flex flex-row items-center gap-1'>
         <Text className={`${connected? "text-connectedGreen" : "text-disconnectedRed"}`}>
@@ -11,4 +11,4 @@ const CustomBanner: React.FC<{ connected?: boolean }> = ({ connected = false }) 
   )
 }
 
-export default CustomBanner
+export default CustomStatusBanner

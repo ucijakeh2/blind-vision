@@ -1,6 +1,7 @@
+import icons from '@/constants/icons'
 import { useRouter } from 'expo-router'
 import { View, Text } from 'react-native'
-import { Button } from 'react-native-paper'
+import { Button, Icon } from 'react-native-paper'
 
 const CustomLabel: React.FC<{ text: string, includeBackButton?: boolean }> = ({ text, includeBackButton = false }) => {
   const router = useRouter()
@@ -12,10 +13,17 @@ const CustomLabel: React.FC<{ text: string, includeBackButton?: boolean }> = ({ 
         </Text>
         { includeBackButton && 
           <Button
-            mode="elevated" 
-            onPress={() => router.dismiss()} 
-          >
-            Back
+            className='border-2 border-white'
+            mode="text" 
+            icon={() => (
+              <Icon
+                source={icons.leftArrow}
+                color='white'
+                size={20}
+              />
+            )}
+            onPress={() => router.dismiss()}
+          >{""}
           </Button>
         }
     </View>

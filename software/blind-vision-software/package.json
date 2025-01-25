@@ -17,6 +17,7 @@
   "dependencies": {
     "@expo/env": "^0.4.0",
     "@expo/vector-icons": "^14.0.2",
+    "@hichembaali/react-native-wheel-scrollview-picker": "^1.0.0",
     "@react-navigation/native": "^6.0.2",
     "expo": "~52.0.26",
     "expo-constants": "~17.0.4",

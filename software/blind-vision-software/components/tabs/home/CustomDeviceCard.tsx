@@ -5,7 +5,7 @@ import { View, Image } from 'react-native'
 import { useState } from 'react'
 
 import CustomSlider from './CustomSlider'
-import CustomBanner from './CustomBanner'
+import CustomStatusBanner from './CustomStatusBanner'
 
 interface CustomDeviceCardProps {
     deviceName: string,
@@ -33,7 +33,7 @@ const CustomDeviceCard: React.FC<CustomDeviceCardProps> = ({
         <CustomSlider value={value} setValue={setValue}/>
         <Image className='absolute right-0 top-1/4' source={imageSource}/>
         <View className='h-full flex-1 flex flex-col items-end justify-between ml-6'>
-          <CustomBanner connected={connected}/>
+          <CustomStatusBanner connected={connected}/>
           <Link href={destination} asChild>
             <Button
               className="border-white w-full"
