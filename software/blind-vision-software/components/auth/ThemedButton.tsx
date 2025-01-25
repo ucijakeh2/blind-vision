@@ -1,4 +1,4 @@
-import { type Dispatch, type SetStateAction } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 import { Button } from 'react-native-paper'
 
 interface ThemedButtonProps {
@@ -6,7 +6,7 @@ interface ThemedButtonProps {
     icon?: string
     textColor?: string,
     text: string,
-    trigger: Dispatch<SetStateAction<boolean>>
+    trigger: () => void
 }
 
 const ThemedButton: React.FC<ThemedButtonProps> = ({ 
@@ -16,11 +16,12 @@ const ThemedButton: React.FC<ThemedButtonProps> = ({
     text, 
     trigger,
     ...props }) => {
+
     return ( 
         <Button 
             className={`mb-6 ${customNativeWind}`} 
             mode="elevated" 
-            onPress={() => trigger(true)} 
+            onPress={trigger} 
             icon={icon || ""} 
             textColor={textColor}
             {...props}

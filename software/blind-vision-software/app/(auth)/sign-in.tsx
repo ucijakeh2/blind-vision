@@ -1,7 +1,7 @@
-import { Keyboard, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import { Keyboard, StyleSheet, Text, TouchableWithoutFeedback, View, Button } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
-import { Link, useRouter } from "expo-router";
-import { useState } from "react";
+import { Link, useRouter, Redirect } from "expo-router";
+import { useContext, useState } from "react";
 
 import ThemedTextInput from "@/components/auth/ThemedTextInput";
 import ThemedButton from "@/components/auth/ThemedButton";
@@ -9,11 +9,13 @@ import AuthLabel from "@/components/auth/AuthLabel";
 
 import styles from "@/constants/styles";
 
+import { AuthContext } from "../_layout";
+
 export default function SignIn() {
     const router = useRouter()
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [reqLogIn, setLogIn] = useState(false);
+    const [reqLogIn, setLogIn] = useContext(AuthContext);
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

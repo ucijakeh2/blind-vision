@@ -10,7 +10,7 @@ import styles from "@/constants/styles";
 
 
 export default function Home() {
-
+    
     return (
         <SafeAreaView className={styles.tabs.safeAreaViewStyle}>
             <Image 
