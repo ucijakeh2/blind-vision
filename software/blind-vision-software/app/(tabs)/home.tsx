@@ -20,12 +20,14 @@ export default function Home() {
             <HomeLabel firstName="Huy"/>
             <CustomDeviceCard
                 deviceName="Glasses"
+                sliderName="Glasses volume"
                 destination="/settings/glasses"
                 connected={true}
                 imageSource={images.glasses}
             />
             <CustomDeviceCard
                 deviceName="Stick"
+                sliderName="Blind stick vibration"
                 destination="/settings/stick"
                 connected={false}
                 imageSource={images.blindStick}

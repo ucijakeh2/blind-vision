@@ -4,11 +4,12 @@ import { Button } from 'react-native-paper'
 import { View, Image } from 'react-native'
 import { useState } from 'react'
 
-import CustomSlider from './CustomSlider'
 import CustomStatusBanner from './CustomStatusBanner'
+import CustomSlider from './CustomSlider'
 
 interface CustomDeviceCardProps {
     deviceName: string,
+    sliderName: string,
     destination: LinkProps["href"],
     connected: boolean,
     imageSource: object
@@ -16,6 +17,7 @@ interface CustomDeviceCardProps {
 
 const CustomDeviceCard: React.FC<CustomDeviceCardProps> = ({
     deviceName,
+    sliderName,
     destination,
     connected,
     imageSource,
@@ -30,7 +32,7 @@ const CustomDeviceCard: React.FC<CustomDeviceCardProps> = ({
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
       >
-        <CustomSlider value={value} setValue={setValue}/>
+        <CustomSlider sliderName={sliderName} value={value} setValue={setValue}/>
         <Image className='absolute right-0 top-1/4' source={imageSource}/>
         <View className='h-full flex-1 flex flex-col items-end justify-between ml-6'>
           <CustomStatusBanner connected={connected}/>

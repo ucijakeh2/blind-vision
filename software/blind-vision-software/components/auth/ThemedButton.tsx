@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction } from 'react'
 import { Button } from 'react-native-paper'
 
 interface ThemedButtonProps {

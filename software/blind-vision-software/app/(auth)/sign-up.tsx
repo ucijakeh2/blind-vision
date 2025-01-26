@@ -25,7 +25,7 @@ export default function SignIn() {
     // }, [reqSignUp])
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={styleSheet.container}>
                 <LinearGradient 
                     colors={['#81DCD4', "#0D9276"]} 

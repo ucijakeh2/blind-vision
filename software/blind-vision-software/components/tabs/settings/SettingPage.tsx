@@ -1,11 +1,14 @@
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Image, View } from "react-native"
+import { useContext } from "react"
 
 import CustomLabel from "./CustomLabel"
 import CustomList from "./CustomList"
 
 import LayoutObject from "@/constants/types/LayoutObject"
 import styles from "@/constants/styles"
+
+import { ThemeContext } from "@/app/_layout"
 
 interface SettingPageProps {
   title: string,
@@ -20,8 +23,13 @@ const SettingPage: React.FC<SettingPageProps> = ({
   layoutSource, 
   includeBackButton = false 
 }) => {
+  const [dark, _] = useContext(ThemeContext)
+
   return (
-    <SafeAreaView className={styles.tabs.safeAreaViewStyle}> 
+    <SafeAreaView 
+      className={styles.tabs.safeAreaViewStyle}
+      style={{backgroundColor: dark ? "#222222" : "white"}}
+    > 
         <Image  
             className={styles.tabs.headerImageStyle}
             source={backgroundSource}

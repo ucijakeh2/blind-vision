@@ -1,7 +1,8 @@
-import icons from '@/constants/icons'
-import { useRouter } from 'expo-router'
-import { View, Text } from 'react-native'
 import { Button, Icon } from 'react-native-paper'
+import { View, Text } from 'react-native'
+import { useRouter } from 'expo-router'
+
+import icons from '@/constants/icons'
 
 const CustomLabel: React.FC<{ text: string, includeBackButton?: boolean }> = ({ text, includeBackButton = false }) => {
   const router = useRouter()

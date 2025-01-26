@@ -18,7 +18,7 @@ export default function SignIn() {
     const [reqLogIn, setLogIn] = useContext(AuthContext);
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={styleSheet.container}>
                 <LinearGradient 
                     colors={['#40A2E3', '#81DCD4']} 

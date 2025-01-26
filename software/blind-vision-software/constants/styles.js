@@ -3,7 +3,7 @@ const auth = {
 }
 
 const tabs = {
-    safeAreaViewStyle: "h-full bg-white flex flex-col items-center justify-between",
+    safeAreaViewStyle: "h-full flex flex-col items-center justify-between",
     headerImageStyle: "absolute top-0"
 }
 
