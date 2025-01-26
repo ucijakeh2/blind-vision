@@ -14,16 +14,17 @@ const CustomLabel: React.FC<{ text: string, includeBackButton?: boolean }> = ({ 
         { includeBackButton && 
           <Button
             className='border-2 border-white'
-            mode="text" 
+            mode='text'
             icon={() => (
               <Icon
                 source={icons.leftArrow}
                 color='white'
-                size={20}
+                size={15}
               />
             )}
+            labelStyle={{color: "white"}}
             onPress={() => router.dismiss()}
-          >{""}
+          >{"Back"}
           </Button>
         }
     </View>

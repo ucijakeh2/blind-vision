@@ -17,12 +17,12 @@ export default function SignIn() {
     const [confirmedPassword, setConfirmedPassword] = useState("");
     const [reqSignUp, setSignUp] = useState(false);
 
-    useEffect(() => {
-        if(reqSignUp) {
-            console.log(email, password)
-            setSignUp(false)
-        }
-    }, [reqSignUp])
+    // useEffect(() => {
+    //     if(reqSignUp) {
+    //         console.log(email, password)
+    //         setSignUp(false)
+    //     }
+    // }, [reqSignUp])
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -72,7 +72,7 @@ export default function SignIn() {
                                     customNativeWind="bg-buttonGreen rounded"
                                     text="Sign Up"
                                     textColor="white"
-                                    trigger={setSignUp}
+                                    trigger={() => {}}
                                 />
                             </View>
                             <View className="border-t">

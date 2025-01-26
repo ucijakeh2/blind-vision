@@ -34,7 +34,7 @@ const CustomDeviceCard: React.FC<CustomDeviceCardProps> = ({
         <Image className='absolute right-0 top-1/4' source={imageSource}/>
         <View className='h-full flex-1 flex flex-col items-end justify-between ml-6'>
           <CustomStatusBanner connected={connected}/>
-          <Link href={destination} asChild>
+          <Link href={destination} withAnchor asChild>
             <Button
               className="border-white w-full"
               mode="outlined"

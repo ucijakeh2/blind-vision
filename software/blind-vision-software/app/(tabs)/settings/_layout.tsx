@@ -1,6 +1,4 @@
-import backgrounds from '@/constants/backgrounds'
 import { Stack } from 'expo-router'
-import { View, Text, Image } from 'react-native'
 
 const SettingsLayout = () => {
   return (
@@ -16,8 +14,7 @@ const SettingsLayout = () => {
             name='profile'
             options={{
                 title: "Profile",
-                headerShown: false,
-                headerBackground: () => (<Image source={backgrounds.profile}/>)
+                headerShown: false
             }}            
         />
         <Stack.Screen
@@ -33,6 +30,7 @@ const SettingsLayout = () => {
                 title: "Stick",
                 headerShown: false
             }}
+            key={0}
         />
     </Stack>
   )
