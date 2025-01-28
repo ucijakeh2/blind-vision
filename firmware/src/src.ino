@@ -18,7 +18,9 @@ void setup() {
 }
 
 void loop() {
-  Serial.println(us_read_useful());
+  uint8_t l_useful = us_read_useful();
+  // Serial.println(l_useful);
+  analogWrite(LED_PIN, l_useful);
   delay(50);
 }
 
@@ -60,12 +62,22 @@ void setup() {
   pinMode(LED_PIN, OUTPUT);
   us_init();
   va_init();
+  sp_init();
   sleep(1);
 }
 
 void loop() {
-  va_drive(us_read_useful());
-  delay(50);
+  static uint8_t s_useful = 0;
+  static unsigned long s_loop_it = 0;
+  // delay(50);
+  if ((s_loop_it++) > 1000000 == 0)
+  {
+    s_loop_it = 0;
+    s_useful = us_read_useful();
+    sp_drive_amount(s_useful);
+    Serial.println(s_useful);
+  }
+  sp_drive();
 }
 
 // GLASSES
