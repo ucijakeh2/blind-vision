@@ -75,7 +75,7 @@ void loop() {
     s_loop_it = 0;
     s_useful = us_read_useful();
     sp_drive_amount(s_useful);
-    Serial.println(s_useful);
+    // Serial.println(s_useful);
   }
   sp_drive();
 }
