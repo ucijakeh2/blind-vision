@@ -1,8 +1,8 @@
 #include "sp.h"
 
-#define SP_LEVELS 10
+#define SP_LEVELS 4
 #define MIN_PERIOD_uS 500
-#define MAX_PERIOD_uS 1000
+#define MAX_PERIOD_uS 600
 #define PERIOD_RANGE_uS (MAX_PERIOD_uS - MIN_PERIOD_uS)
 
 bool     s_cutoff    = false;
@@ -16,12 +16,14 @@ void sp_init()
 
 void sp_drive_amount(uint8_t a_amount)
 {
-  s_cutoff = (a_amount == 0);
-  
+  s_cutoff = a_amount == 0;
+
   constexpr double RATIO = ((double)SP_LEVELS / (double)256);
   constexpr double PERIOD_uS_VS_LEVEL = (double)PERIOD_RANGE_uS / SP_LEVELS;
 
-  int l_level = SP_LEVELS - int(a_amount * RATIO);
+  int l_cmp_lvl = int(a_amount * RATIO);
+
+  int l_level = SP_LEVELS - l_cmp_lvl;
   s_period_ms = MIN_PERIOD_uS + l_level * PERIOD_uS_VS_LEVEL;
 
 }

@@ -70,7 +70,7 @@ void loop() {
   static uint8_t s_useful = 0;
   static unsigned long s_loop_it = 0;
   // delay(50);
-  if ((s_loop_it++) > 1000000 == 0)
+  if ((s_loop_it++) > 50)
   {
     s_loop_it = 0;
     s_useful = us_read_useful();
