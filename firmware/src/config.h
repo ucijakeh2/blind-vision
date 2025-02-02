@@ -11,7 +11,7 @@
 ///////////////////// BUILD SETTINGS //////////////////////
 ///////////////////////////////////////////////////////////
 #define TEST_US 0
-#define TEST_CO 1
+#define TEST_CO 0
 #define TEST_VA 0
 #define GLASSES 1
 #define DEBUG   1
