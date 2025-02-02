@@ -40,9 +40,16 @@ void setup() {
 void loop() {
   int x,y,z;
   co_read(&x, &y, &z);
-  // Serial.println(l_useful);
-  // analogWrite(LED_PIN, l_useful);
-  delay(50);
+
+  // print measured values
+  Serial.print("X: ");
+  Serial.print(x);
+  Serial.print(" Y: ");
+  Serial.print(y);
+  Serial.print(" Z: ");
+  Serial.println(z);
+
+  delay(250);
 }
 
 // TEST_US

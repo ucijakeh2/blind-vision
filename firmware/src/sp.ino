@@ -42,7 +42,7 @@ void sp_drive()
   static uint32_t s_it = 0;
   static bool     s_pulse_en = false;
 
-  Serial.println(s_pulse_en);
+  LOG(s_pulse_en);
 
   if (s_it++ > s_period_ms) {s_pulse_en = !s_pulse_en; s_it = 0;}
 
