@@ -11,6 +11,7 @@
 ///////////////////// BUILD SETTINGS //////////////////////
 ///////////////////////////////////////////////////////////
 #define TEST_US 0
+#define TEST_CO 1
 #define TEST_VA 0
 #define GLASSES 1
 #define DEBUG   1
@@ -29,20 +30,26 @@
 ///////////// GLASSES-SPECIFIC CONFIGURATION //////////////
 ///////////////////////////////////////////////////////////
 
-#define VIBRATOR_PIN 17
-#define LED_PIN      24
-#define SP_PIN       18
+// SPEAKER PINS
+// #define SP_PIN       17
 
 // ULTRASONIC SENSOR PINS
-#define US_TX 10
-#define US_RX 9
-#define US_PW 8
-#define US_AN 20
+#define US_PW 17
+#define US_AN 18
+#define US_RX 19
+#define US_TX 20
+
+// COMPASS PINS
+// #define CO_DRDY 2
+#define CO_SDA  21
+#define CO_SCL  22
 
 #else
 ///////////////////////////////////////////////////////////
 ////////////// STICK-SPECIFIC CONFIGURATION ///////////////
 ///////////////////////////////////////////////////////////
+
+#define VIBRATOR_PIN 17
 
 #endif
 

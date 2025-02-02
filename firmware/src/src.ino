@@ -11,16 +11,37 @@ void setup() {
   LOG("----------------");
   LOG("TESTING ULTRASONIC");
   LOG("----------------");
-  pinMode(LED_PIN, OUTPUT);
   us_init();
-  va_init();
   sleep(1);
 }
 
 void loop() {
   uint8_t l_useful = us_read_useful();
+  Serial.println(l_useful);
+  // analogWrite(LED_PIN, l_useful);
+  delay(50);
+}
+
+#elif TEST_CO
+///////////////////////////////////////////////////////////
+/////////////////// COMPASS TEST MAIN /////////////////////
+///////////////////////////////////////////////////////////
+
+void setup() {
+  Serial.begin(9600);
+  sleep(2);
+  LOG("----------------");
+  LOG("TESTING COMPASS");
+  LOG("----------------");
+  co_init();
+  sleep(1);
+}
+
+void loop() {
+  int x,y,z;
+  co_read(&x, &y, &z);
   // Serial.println(l_useful);
-  analogWrite(LED_PIN, l_useful);
+  // analogWrite(LED_PIN, l_useful);
   delay(50);
 }
 

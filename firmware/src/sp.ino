@@ -1,5 +1,7 @@
 #include "sp.h"
 
+#ifdef SP_PIN // check SP_PIN defined
+
 #define SP_LEVELS 10
 #define PERIOD_RANGE_uS (MAX_PERIOD_uS - MIN_PERIOD_uS)
 
@@ -59,3 +61,22 @@ void sp_drive()
   }
   
 }
+
+#else // SP_PIN undefined
+
+void sp_init()
+{
+  // do nothing.
+}
+
+void sp_drive_amount(uint8_t)
+{
+  // do nothing.
+}
+
+void sp_drive()
+{
+  // do nothing.
+}
+
+#endif
