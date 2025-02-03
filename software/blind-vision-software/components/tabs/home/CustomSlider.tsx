@@ -25,7 +25,7 @@ const CustomSlider: React.FC<CustomSliderProps> = ({ sliderName, value, setValue
           value={value}
           onComplete={(value: number) => AccessibilityInfo.announceForAccessibility(`${sliderName} set to ${value}%`)}
           onChange={(value: number) => setValue(value)}
-          height={260}
+          height={290}
           width={40}
           step={10}
           min={0}

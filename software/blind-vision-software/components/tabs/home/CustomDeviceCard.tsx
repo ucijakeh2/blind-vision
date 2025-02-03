@@ -25,7 +25,7 @@ const CustomDeviceCard: React.FC<CustomDeviceCardProps> = ({
   const [value, setValue] = useState(0);
 
   return (
-    <View className='shadow shadow-neutral-400 h-2/5 w-11/12 rounded-3xl'>
+    <View className='shadow shadow-neutral-400 h-2/5 w-11/12 rounded-3xl mb-6'>
       <LinearGradient
         className='h-full rounded-3xl flex flex-row items-center justify-between p-6'
         colors={['#40A2E3', '#CEE7F8']} 
@@ -38,9 +38,10 @@ const CustomDeviceCard: React.FC<CustomDeviceCardProps> = ({
           <CustomStatusBanner connected={connected}/>
           <Link href={destination} withAnchor asChild>
             <Button
-              className="border-white w-full"
+              className="w-full"
               mode="outlined"
               textColor="white"
+              theme={{colors: { outline: "white" }}}
             >
                 {`${deviceName} Settings`}
             </Button>
