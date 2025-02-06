@@ -8,7 +8,7 @@ const CustomLabel: React.FC<{ text: string, includeBackButton?: boolean }> = ({ 
   const router = useRouter()
   
   return (
-    <View className={`mx-auto w-11/12 flex flex-col-reverse items-start h-1/4 ${includeBackButton? "justify-around" : "justify-start pb-5"}`}>
+    <View className={`mx-auto w-11/12 flex flex-col-reverse items-start h-[30%] ${includeBackButton? "justify-around" : "justify-start pb-5"}`}>
         <Text className="text-7xl text-white font-bold mb-0">
             {text}
         </Text>

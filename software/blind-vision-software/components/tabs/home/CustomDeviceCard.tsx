@@ -27,13 +27,13 @@ const CustomDeviceCard: React.FC<CustomDeviceCardProps> = ({
   return (
     <View className='shadow shadow-neutral-400 h-2/5 w-11/12 rounded-3xl mb-6'>
       <LinearGradient
-        className='h-full rounded-3xl flex flex-row items-center justify-between p-6'
+        className='h-full rounded-3xl flex flex-row items-center justify-start p-6'
         colors={['#40A2E3', '#CEE7F8']} 
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
       >
         <CustomSlider sliderName={sliderName} value={value} setValue={setValue}/>
-        <Image className='absolute right-0 top-1/4' source={imageSource}/>
+        <Image className='absolute -right-4 top-1/4 scale-90' source={imageSource}/>
         <View className='h-full flex-1 flex flex-col items-end justify-between ml-6'>
           <CustomStatusBanner connected={connected}/>
           <Link href={destination} withAnchor asChild>
