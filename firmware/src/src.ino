@@ -1,6 +1,7 @@
 #include <arduino-timer.h>
 #include "config.h"
 #include "timer.h"
+#include <math.h>
 
 #if TEST_US
 ///////////////////////////////////////////////////////////
@@ -158,10 +159,14 @@ bool print_measurements(void*)
 
 bool update_us_data(void*)
 {
-  constexpr uint32_t MAX_FREQUENCY_mHz = 10000;
+  constexpr uint32_t MAX_FREQUENCY_mHz = 20000;
   constexpr uint32_t MIN_FREQUENCY_mHz = 500;
-  constexpr uint8_t QUANTIZATION_LEVELS = 4;
-  static uint8_t s_previous_quantized_measurement = 0;
+  constexpr uint8_t  QUANTIZATION_LEVELS = 4;
+  static uint8_t     s_previous_quantized_measurement = 0;
+  static double      s_running_avg_useful_measurement = 0;
+
+  constexpr double RUNNING_AVG_BETA  = 0.85;
+  constexpr double RUNNING_AVG_ALPHA = 1.0 - RUNNING_AVG_BETA;
 
   // Serial.println(us_read_scaled());
 
@@ -170,10 +175,15 @@ bool update_us_data(void*)
   // max 255, min 0
   g_us_useful_measurement = us_read_useful();
 
+  ////////////////////////////////////////////////////////////
+  //////////////////// UPDATE RUNNING AVERAGE ////////////////
+  ////////////////////////////////////////////////////////////
+  s_running_avg_useful_measurement = RUNNING_AVG_BETA * s_running_avg_useful_measurement + RUNNING_AVG_ALPHA * (double)g_us_useful_measurement;
+  
   // Serial.println(g_us_useful_measurement);
 
   // max 255, min 0
-  uint8_t l_us_quantized_measurement = (uint32_t)g_us_useful_measurement * (uint32_t)QUANTIZATION_LEVELS / (uint32_t)255;
+  uint8_t l_us_quantized_measurement = round((double)s_running_avg_useful_measurement * (double)QUANTIZATION_LEVELS / (double)255);
 
   // Serial.println(l_us_quantized_measurement);
 
