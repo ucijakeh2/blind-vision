@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "blind-vision-app",
+    "name": "Blind Vision",
     "slug": "blind-vision-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -23,10 +23,13 @@
         "backgroundColor": "#ffffff"
       },
       "permissions": [
+        "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.BLUETOOTH",
         "android.permission.BLUETOOTH_ADMIN",
+        "android.permission.BLUETOOTH_SCAN",
         "android.permission.BLUETOOTH_CONNECT"
-      ]
+      ],
+      "package": "com.tuthanhhuy2124.blindvisionapp"
     },
     "web": {
       "bundler": "metro",
@@ -36,11 +39,14 @@
     "plugins": [
       "expo-router",
       [
-        "react-native-ble-manager",
+        "expo-build-properties",
         {
-          "bluetoothAlwaysPermission": "Allow Blind Vision to connect to Bluetooth devices"
+          "android": {
+            "kotlinVersion": "1.9.24"
+          }
         }
-      ]
+      ],
+      "react-native-ble-manager"
     ],
     "experiments": {
       "typedRoutes": true
