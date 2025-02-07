@@ -187,13 +187,15 @@ bool update_us_data(void*)
     // cancel pulse task (ONLY IF CURRENTLY RUNNING)
     g_us_timer.cancel(g_sp_pulse_task);
     g_sp_pulse_task = nullptr;
-    sp_drive_amount(0);
   }
 
   ////////////////////////////////////////////////////////////
   ////////////// IF CUTOFF, DON'T START PULSE TASK ///////////
   ////////////////////////////////////////////////////////////
-  if (l_us_quantized_measurement == 0) return true;
+  if (l_us_quantized_measurement == 0) {
+    sp_drive_amount(0); // we never want to get stuck at a note. Always clear the drive amount.
+    return true;
+  }
 
   // COMPUTE FREQUENCY BASED ON INVERSE-DISTANCE
   uint32_t frequency_mHz = (uint32_t)l_us_quantized_measurement * ((uint32_t)MAX_FREQUENCY_mHz - (uint32_t)MIN_FREQUENCY_mHz) / (uint32_t)QUANTIZATION_LEVELS + (uint32_t)MIN_FREQUENCY_mHz;
@@ -206,7 +208,7 @@ bool update_us_data(void*)
 
   // Serial.println(g_us_timer.size());
 
-  sp_pulse(nullptr); // pulse once to make sure we emit SOME noise when quantized level is transitioning
+  // sp_pulse(nullptr); // pulse once to make sure we emit SOME noise when quantized level is transitioning
   g_sp_pulse_task = g_us_timer.every(period_us, sp_pulse);
   
   return true;
@@ -229,9 +231,9 @@ void setup() {
   co_init();
   sp_init();
   sleep(1);
-  g_us_timer.every(200000, update_us_data);
-  g_us_timer.every(250000, update_co_data);
-  g_us_timer.every(50000,  print_measurements);
+  g_us_timer.every(50000, update_us_data);
+  // g_us_timer.every(250000, update_co_data);
+  // g_us_timer.every(50000,  print_measurements);
 }
 
 void loop() {
