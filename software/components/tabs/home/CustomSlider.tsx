@@ -1,14 +1,15 @@
-import { Dispatch, SetStateAction, useRef } from 'react';
-import { View, Text, AccessibilityInfo, findNodeHandle, Alert } from 'react-native'
+import { Dispatch, SetStateAction } from 'react';
+import { View, Text, AccessibilityInfo } from 'react-native'
 import VerticalSlider from 'rn-vertical-slider'; 
 
 interface CustomSliderProps {
     sliderName: string,
+    step: number,
     value: number,
     setValue: Dispatch<SetStateAction<number>>
 }
 
-const CustomSlider: React.FC<CustomSliderProps> = ({ sliderName, value, setValue }) => {
+const CustomSlider: React.FC<CustomSliderProps> = ({ sliderName, step, value, setValue }) => {
   return (
     <View
       accessible={true}
@@ -27,7 +28,7 @@ const CustomSlider: React.FC<CustomSliderProps> = ({ sliderName, value, setValue
           onChange={(value: number) => setValue(value)}
           height={240}
           width={40}
-          step={10}
+          step={step}
           min={0}
           max={100}
           borderRadius={5}
