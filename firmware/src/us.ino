@@ -1,5 +1,7 @@
 #include "us.h"
 
+#ifdef US_TX // if us sensor is plugged in
+
 void us_calibrate()
 {
   pinMode(US_TX, OUTPUT);
@@ -98,7 +100,7 @@ uint8_t  us_read_useful()
 
   #else
 
-  constexpr uint8_t MAX_USEFUL_DISTANCE_IN = 72;
+  constexpr uint8_t MAX_USEFUL_DISTANCE_IN = 48;
   constexpr uint8_t MIN_USEFUL_DISTANCE_IN = 12;
 
   #endif
@@ -129,3 +131,24 @@ uint8_t  us_read_useful()
   return l_result;
 
 }
+
+#else // if us sensor is not plugged in
+
+void us_init()
+{
+ // do nothing
+}
+
+uint16_t us_read_scaled()
+{
+ // do nothing
+  return 0;
+}
+
+uint8_t us_read_useful()
+{
+ // do nothing
+  return 0;
+}
+
+#endif

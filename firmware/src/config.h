@@ -13,7 +13,7 @@
 #define TEST_US 0
 #define TEST_CO 0
 #define TEST_VA 0
-#define GLASSES 1
+#define GLASSES 0
 #define DEBUG   1
 
 ///////////////////////////////////////////////////////////
@@ -49,7 +49,15 @@
 ////////////// STICK-SPECIFIC CONFIGURATION ///////////////
 ///////////////////////////////////////////////////////////
 
-#define VIBRATOR_PIN 17
+// ULTRASONIC SENSOR PINS
+#define US_PW 17
+#define US_AN 18
+#define US_RX 19
+#define US_TX 20
+
+// VIBRATING ACTUATOR PINS
+#define VA_PIN_0 23
+#define VA_PIN_1 24
 
 #endif
 

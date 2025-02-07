@@ -72,7 +72,6 @@ void setup() {
   LOG("----------------");
   LOG("TESTING VIBRATING ACTUATOR");
   LOG("----------------");
-  pinMode(LED_PIN, OUTPUT);
   va_init();
   sleep(1);
 }
@@ -97,23 +96,29 @@ int g_co_x;
 int g_co_y;
 int g_co_z;
 
+bool print_measurements(void*)
+{
+  // print measured compass values
+  Serial.print("X: ");
+  Serial.print(g_co_x);
+  Serial.print(" Y: ");
+  Serial.print(g_co_y);
+  Serial.print(" Z: ");
+  Serial.print(g_co_z);
+  Serial.print(", US: ");
+  Serial.println(g_us_useful_measurement);
+  return true;
+}
+
 bool update_us_data(void*)
 {
   g_us_useful_measurement = us_read_useful();
-  LOG(String("US: ") + g_us_useful_measurement);
   return true;
 }
 
 bool update_co_data(void*)
 {
   co_read(&g_co_x, &g_co_y, &g_co_z);
-  // print measured values
-  Serial.print("X: ");
-  Serial.print(g_co_x);
-  Serial.print(" Y: ");
-  Serial.print(g_co_y);
-  Serial.print(" Z: ");
-  Serial.println(g_co_z);
   return true;
 }
 
@@ -123,13 +128,14 @@ void setup() {
   Serial.begin(9600);
   sleep(2);
   LOG("----------------");
-  LOG("DEVICE BOOTED UP");
+  LOG("DEVICE BOOTED UP: GLASSES");
   LOG("----------------");
   us_init();
   co_init();
   sleep(1);
   timer.every(50,  update_us_data);
   timer.every(250, update_co_data);
+  timer.every(50,  print_measurements);
 }
 
 void loop() {
@@ -143,6 +149,47 @@ void loop() {
 ///////////// GENERIC RELEASE MAIN - STICK ////////////////
 ///////////////////////////////////////////////////////////
 
+// ultrasonic measurement
+uint8_t g_us_useful_measurement;
 
+bool update_us_data(void*)
+{
+  g_us_useful_measurement = us_read_useful();
+  return true;
+}
+
+bool update_va_drive(void*)
+{
+  constexpr uint8_t MIN_DRIVE_AMOUNT = 140;
+  constexpr uint8_t MAX_DRIVE_AMOUNT = 255;
+  constexpr uint8_t DRIVE_AMOUNT_RANGE = MAX_DRIVE_AMOUNT - MIN_DRIVE_AMOUNT;
+
+  uint8_t l_drive_amount = 
+    g_us_useful_measurement == 0 ?
+    0 : // cutoff
+    (double)g_us_useful_measurement * (double)DRIVE_AMOUNT_RANGE/(double)255 + (double)MIN_DRIVE_AMOUNT;
+
+  va_drive(l_drive_amount);
+  return true;
+}
+
+auto timer = timer_create_default();
+
+void setup() {
+  Serial.begin(9600);
+  sleep(2);
+  LOG("----------------");
+  LOG("DEVICE BOOTED UP: STICK");
+  LOG("----------------");
+  va_init();
+  sleep(1);
+  timer.every(50, update_us_data);
+  timer.every(50, update_va_drive);
+}
+
+void loop() {
+  timer.tick();
+  delay(1);
+}
 
 #endif 
