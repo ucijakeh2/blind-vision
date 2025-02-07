@@ -13,7 +13,8 @@
 #define TEST_US 0
 #define TEST_CO 0
 #define TEST_VA 0
-#define GLASSES 0
+#define TEST_SP 0
+#define GLASSES 1
 #define DEBUG   1
 
 ///////////////////////////////////////////////////////////
@@ -31,7 +32,8 @@
 ///////////////////////////////////////////////////////////
 
 // SPEAKER PINS
-// #define SP_PIN       17
+#define SP_PIN_0 4
+#define SP_PIN_1 6
 
 // ULTRASONIC SENSOR PINS
 #define US_PW 17

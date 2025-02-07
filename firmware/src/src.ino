@@ -1,5 +1,6 @@
 #include <arduino-timer.h>
 #include "config.h"
+#include "timer.h"
 
 #if TEST_US
 ///////////////////////////////////////////////////////////
@@ -83,6 +84,37 @@ void loop() {
 }
 
 // TEST_VA
+#elif TEST_SP
+///////////////////////////////////////////////////////////
+//////////////////// SPEAKER TEST MAIN ////////////////////
+///////////////////////////////////////////////////////////
+
+bool pulse(void*)
+{
+  static bool s_pulse = false;
+  Serial.println(s_pulse);
+  s_pulse = !s_pulse;
+  sp_drive_amount(s_pulse ? 1 : 0);
+  return true;
+}
+
+void setup() {
+  Serial.begin(9600);
+  sleep(2);
+  LOG("----------------");
+  LOG("TESTING SPEAKERS");
+  LOG("----------------");
+  sp_init();
+  sleep(1);
+  g_us_timer.every(2000000, pulse);
+}
+
+void loop() {
+  g_us_timer.tick();
+  delayMicroseconds(1);
+}
+
+// TEST_SP
 #elif GLASSES
 ///////////////////////////////////////////////////////////
 //////////// GENERIC RELEASE MAIN - GLASSES ///////////////
@@ -96,23 +128,65 @@ int g_co_x;
 int g_co_y;
 int g_co_z;
 
+#define MAX_SP_PULSE_PERIOD 1000000
+#define MIN_SP_PULSE_PERIOD  250000
+
+g_us_timer_t::Task g_sp_pulse_task;
+
+bool sp_pulse(void*)
+{
+  static bool s_pulse = false;
+  // Serial.println(s_pulse);
+  s_pulse = !s_pulse;
+  sp_drive_amount(s_pulse ? 1 : 0);
+  return true;
+}
+
 bool print_measurements(void*)
 {
   // print measured compass values
-  Serial.print("X: ");
-  Serial.print(g_co_x);
-  Serial.print(" Y: ");
-  Serial.print(g_co_y);
-  Serial.print(" Z: ");
-  Serial.print(g_co_z);
-  Serial.print(", US: ");
-  Serial.println(g_us_useful_measurement);
+  // Serial.print("X: ");
+  // Serial.print(g_co_x);
+  // Serial.print(" Y: ");
+  // Serial.print(g_co_y);
+  // Serial.print(" Z: ");
+  // Serial.print(g_co_z);
+  // Serial.print(", US: ");
+  // Serial.println(g_us_useful_measurement);
   return true;
 }
 
 bool update_us_data(void*)
 {
-  g_us_useful_measurement = us_read_useful();
+  constexpr uint32_t MAX_FREQUENCY_mHz = 2000;
+  constexpr uint32_t MIN_FREQUENCY_mHz = 500;
+  constexpr uint8_t QUANTIZATION_LEVELS = 3;
+  static uint8_t s_previous_quantized_measurement = 0;
+
+  Serial.println(us_read_scaled());
+
+// ////////////////////
+
+//   // max 255, min 0
+//   g_us_useful_measurement = us_read_useful();
+
+//   Serial.println(g_us_useful_measurement);
+
+//   // max 255, min 0
+//   uint8_t l_us_quantized_measurement = (uint32_t)g_us_useful_measurement * (uint32_t)QUANTIZATION_LEVELS / (uint32_t)255;
+
+//   // Serial.println(l_us_quantized_measurement);
+
+//   // do NOT cancel tasks if the general measurement has not changed.
+//   if (l_us_quantized_measurement == s_previous_quantized_measurement) return true;
+
+//   // COMPUTE FREQUENCY BASED ON INVERSE-DISTANCE
+//   uint32_t frequency_mHz = (uint32_t)l_us_quantized_measurement * ((uint32_t)MAX_FREQUENCY_mHz - (uint32_t)MIN_FREQUENCY_mHz) / (uint32_t)255;
+
+//   // Serial.println(frequency_mHz);
+
+//   // g_sp_pulse_task = g_us_timer.every()
+  
   return true;
 }
 
@@ -122,25 +196,25 @@ bool update_co_data(void*)
   return true;
 }
 
-auto timer = timer_create_default();
-
 void setup() {
   Serial.begin(9600);
+  g_sp_pulse_task = nullptr;
   sleep(2);
   LOG("----------------");
   LOG("DEVICE BOOTED UP: GLASSES");
   LOG("----------------");
   us_init();
   co_init();
+  sp_init();
   sleep(1);
-  timer.every(50,  update_us_data);
-  timer.every(250, update_co_data);
-  timer.every(50,  print_measurements);
+  g_us_timer.every(50000,  update_us_data);
+  g_us_timer.every(250000, update_co_data);
+  g_us_timer.every(50000,  print_measurements);
 }
 
 void loop() {
-  timer.tick();
-  delay(1);
+  g_us_timer.tick();
+  delayMicroseconds(1);
 }
 
 // GLASSES
