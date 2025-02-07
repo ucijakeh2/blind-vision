@@ -95,7 +95,7 @@ uint8_t  us_read_useful()
 
   #if GLASSES
 
-  constexpr uint8_t MAX_USEFUL_DISTANCE_IN = 48;
+  constexpr uint8_t MAX_USEFUL_DISTANCE_IN = 60;
   constexpr uint8_t MIN_USEFUL_DISTANCE_IN = 12;
 
   #else

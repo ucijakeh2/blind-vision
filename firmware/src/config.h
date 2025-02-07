@@ -32,14 +32,14 @@
 ///////////////////////////////////////////////////////////
 
 // SPEAKER PINS
-#define SP_PIN_0 4
-#define SP_PIN_1 6
+#define SP_PIN_0 18
+#define SP_PIN_1 23
 
 // ULTRASONIC SENSOR PINS
-#define US_PW 17
-#define US_AN 18
-#define US_RX 19
-#define US_TX 20
+#define US_TX 10
+#define US_RX 9
+#define US_PW 8
+#define US_AN 20
 
 // COMPASS PINS
 // #define CO_DRDY 2
@@ -52,10 +52,10 @@
 ///////////////////////////////////////////////////////////
 
 // ULTRASONIC SENSOR PINS
-#define US_PW 17
-#define US_AN 18
-#define US_RX 19
-#define US_TX 20
+#define US_TX 10
+#define US_RX 9
+#define US_PW 8
+#define US_AN 20
 
 // VIBRATING ACTUATOR PINS
 #define VA_PIN_0 23
