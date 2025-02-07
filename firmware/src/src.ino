@@ -138,7 +138,7 @@ bool sp_pulse(void*)
   static bool s_pulse = false;
   // Serial.println(s_pulse);
   s_pulse = !s_pulse;
-  sp_drive_amount(s_pulse ? 1 : 0);
+  // sp_drive_amount(s_pulse ? 1 : 0);
   return true;
 }
 
@@ -160,32 +160,52 @@ bool update_us_data(void*)
 {
   constexpr uint32_t MAX_FREQUENCY_mHz = 2000;
   constexpr uint32_t MIN_FREQUENCY_mHz = 500;
-  constexpr uint8_t QUANTIZATION_LEVELS = 3;
+  constexpr uint8_t QUANTIZATION_LEVELS = 4;
   static uint8_t s_previous_quantized_measurement = 0;
 
-  Serial.println(us_read_scaled());
+  // Serial.println(us_read_scaled());
 
-// ////////////////////
+////////////////////
 
-//   // max 255, min 0
-//   g_us_useful_measurement = us_read_useful();
+  // max 255, min 0
+  g_us_useful_measurement = us_read_useful();
 
-//   Serial.println(g_us_useful_measurement);
+  // Serial.println(g_us_useful_measurement);
 
-//   // max 255, min 0
-//   uint8_t l_us_quantized_measurement = (uint32_t)g_us_useful_measurement * (uint32_t)QUANTIZATION_LEVELS / (uint32_t)255;
+  // max 255, min 0
+  uint8_t l_us_quantized_measurement = (uint32_t)g_us_useful_measurement * (uint32_t)QUANTIZATION_LEVELS / (uint32_t)255;
 
-//   // Serial.println(l_us_quantized_measurement);
+  Serial.println(l_us_quantized_measurement);
 
-//   // do NOT cancel tasks if the general measurement has not changed.
-//   if (l_us_quantized_measurement == s_previous_quantized_measurement) return true;
+  // ////////////////////////////////////////////////////////////
+  // ////////////////// LATCH THE QUANTIZED VALUE ///////////////
+  // ////////////////////////////////////////////////////////////
+  // if (l_us_quantized_measurement == s_previous_quantized_measurement) return true;
+  // s_previous_quantized_measurement = l_us_quantized_measurement;
 
-//   // COMPUTE FREQUENCY BASED ON INVERSE-DISTANCE
-//   uint32_t frequency_mHz = (uint32_t)l_us_quantized_measurement * ((uint32_t)MAX_FREQUENCY_mHz - (uint32_t)MIN_FREQUENCY_mHz) / (uint32_t)255;
+  // if (g_sp_pulse_task) {
+  //   // cancel pulse task (ONLY IF CURRENTLY RUNNING)
+  //   g_us_timer.cancel(g_sp_pulse_task);
+  //   g_sp_pulse_task = nullptr;
+  // }
 
-//   // Serial.println(frequency_mHz);
+  // ////////////////////////////////////////////////////////////
+  // ////////////// IF CUTOFF, DON'T START PULSE TASK ///////////
+  // ////////////////////////////////////////////////////////////
+  // if (l_us_quantized_measurement == 0) return true;
 
-//   // g_sp_pulse_task = g_us_timer.every()
+  // // COMPUTE FREQUENCY BASED ON INVERSE-DISTANCE
+  // uint32_t frequency_mHz = (uint32_t)l_us_quantized_measurement * ((uint32_t)MAX_FREQUENCY_mHz - (uint32_t)MIN_FREQUENCY_mHz) / (uint32_t)QUANTIZATION_LEVELS;
+
+  // // Serial.println(frequency_mHz);
+
+  // uint32_t period_us = 1000000000 / frequency_mHz;
+
+  // Serial.println(period_us);
+
+  // // Serial.println(g_us_timer.size());
+
+  // g_sp_pulse_task = g_us_timer.every(period_us, sp_pulse);
   
   return true;
 }
@@ -197,7 +217,7 @@ bool update_co_data(void*)
 }
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(19200);
   g_sp_pulse_task = nullptr;
   sleep(2);
   LOG("----------------");
@@ -207,7 +227,7 @@ void setup() {
   co_init();
   sp_init();
   sleep(1);
-  g_us_timer.every(50000,  update_us_data);
+  g_us_timer.every(49000,  update_us_data);
   g_us_timer.every(250000, update_co_data);
   g_us_timer.every(50000,  print_measurements);
 }
