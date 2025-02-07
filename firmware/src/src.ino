@@ -137,7 +137,7 @@ g_us_timer_t::Task g_sp_pulse_task;
 bool sp_pulse(void*)
 {
   static bool s_pulse = false;
-  Serial.println(s_pulse);
+  // Serial.println(s_pulse);
   s_pulse = !s_pulse;
   sp_drive_amount(s_pulse ? 1 : 0);
   return true;
@@ -165,7 +165,7 @@ bool update_us_data(void*)
   static uint8_t     s_previous_quantized_measurement = 0;
   static double      s_running_avg_useful_measurement = 0;
 
-  constexpr double RUNNING_AVG_BETA  = 0.85;
+  constexpr double RUNNING_AVG_BETA  = 0;
   constexpr double RUNNING_AVG_ALPHA = 1.0 - RUNNING_AVG_BETA;
 
   // Serial.println(us_read_scaled());
@@ -180,7 +180,7 @@ bool update_us_data(void*)
   ////////////////////////////////////////////////////////////
   s_running_avg_useful_measurement = RUNNING_AVG_BETA * s_running_avg_useful_measurement + RUNNING_AVG_ALPHA * (double)g_us_useful_measurement;
   
-  // Serial.println(g_us_useful_measurement);
+  Serial.println(s_running_avg_useful_measurement);
 
   // max 255, min 0
   uint8_t l_us_quantized_measurement = round((double)s_running_avg_useful_measurement * (double)QUANTIZATION_LEVELS / (double)255);
@@ -214,7 +214,7 @@ bool update_us_data(void*)
 
   uint32_t period_us = 1000000000 / frequency_mHz;
 
-  Serial.println(period_us);
+  // Serial.println(period_us);
 
   // Serial.println(g_us_timer.size());
 
