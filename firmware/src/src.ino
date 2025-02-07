@@ -161,7 +161,7 @@ bool update_us_data(void*)
 {
   constexpr uint32_t MAX_FREQUENCY_mHz = 20000;
   constexpr uint32_t MIN_FREQUENCY_mHz = 500;
-  constexpr uint8_t  QUANTIZATION_LEVELS = 4;
+  constexpr uint8_t  QUANTIZATION_LEVELS = 6;
   static uint8_t     s_previous_quantized_measurement = 0;
   static double      s_running_avg_useful_measurement = 0;
 
