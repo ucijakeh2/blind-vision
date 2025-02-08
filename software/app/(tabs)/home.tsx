@@ -43,6 +43,7 @@ export default function Home() {
      
     useEffect(() => {
         ble.requestPermissions();
+        ble.enableBLE();
         ble.start();
     }, []);
 
@@ -62,11 +63,15 @@ export default function Home() {
             {!device && 
                 <BLEButton 
                     trigger={async () => {
-                        setScanning(true)
-                        const connectedDevice: any = await ble.scanThenConnect();
-                        console.log("Returned connected device: " + connectedDevice);
-                        setDevice(connectedDevice);
-                        setScanning(false);
+                        // Only scan & connect if BLE is enabled
+                        // Ask for it otherwise
+                        if(await ble.enableBLE()) {
+                            setScanning(true)
+                            const connectedDevice: any = await ble.scanThenConnect();
+                            console.log("Returned connected device: " + connectedDevice);
+                            setDevice(connectedDevice);
+                            setScanning(false);
+                        }
                     }} 
                     isLoading={isScanning}
                 />

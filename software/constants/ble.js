@@ -113,10 +113,18 @@ async function write(deviceId, byteArray) {
     await BleManager.write(deviceId, SERVICE_UUID, CHARACTERISTIC_UUID, buffer.toJSON().data)
 }
 
+async function enableBLE() {
+    try {
+        await BleManager.enableBluetooth();
+        return true;
+    } catch (error) { return false; }
+}
+
 export default {
     requestPermissions,
     start,
     scanThenConnect,
     read,
-    write
+    write,
+    enableBLE
 }
