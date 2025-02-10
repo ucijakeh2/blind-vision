@@ -121,9 +121,6 @@ void loop() {
 //////////// GENERIC RELEASE MAIN - GLASSES ///////////////
 ///////////////////////////////////////////////////////////
 
-// ultrasonic measurement
-uint8_t g_us_useful_measurement;
-
 // compass measurements
 int g_co_x;
 int g_co_y;
@@ -131,17 +128,6 @@ int g_co_z;
 
 #define MAX_SP_PULSE_PERIOD 1000000
 #define MIN_SP_PULSE_PERIOD  250000
-
-g_us_timer_t::Task g_sp_pulse_task;
-
-bool sp_pulse(void*)
-{
-  static bool s_pulse = false;
-  // Serial.println(s_pulse);
-  s_pulse = !s_pulse;
-  sp_drive_amount(s_pulse ? 1 : 0);
-  return true;
-}
 
 bool print_measurements(void*)
 {
@@ -157,69 +143,34 @@ bool print_measurements(void*)
   return true;
 }
 
-bool update_us_data(void*)
+bool update_us_data_and_beep(void*)
 {
-  constexpr uint32_t MAX_FREQUENCY_mHz = 20000;
-  constexpr uint32_t MIN_FREQUENCY_mHz = 500;
-  constexpr uint8_t  QUANTIZATION_LEVELS = 6;
-  static uint8_t     s_previous_quantized_measurement = 0;
-  static double      s_running_avg_useful_measurement = 0;
+  constexpr uint32_t MAX_BEEP_PERIOD_us = 1000000;
+  constexpr uint32_t MIN_BEEP_PERIOD_us = 100000;
+  constexpr uint32_t BEEP_PERIOD_RANGE_us = MAX_BEEP_PERIOD_us - MIN_BEEP_PERIOD_us;
+  constexpr double   CONVERSION_FACTOR = (double)BEEP_PERIOD_RANGE_us/(double)255;
 
-  constexpr double RUNNING_AVG_BETA  = 0;
-  constexpr double RUNNING_AVG_ALPHA = 1.0 - RUNNING_AVG_BETA;
+  // static pulse var
+  static bool s_pulse = false;
 
-  // Serial.println(us_read_scaled());
+  // toggle pulse
+  s_pulse = !s_pulse;
+
+  // drive speaker with (tone / no tone)
+  sp_drive_amount(s_pulse ? 1 : 0);
 
   ////////////////////
 
   // max 255, min 0
-  g_us_useful_measurement = us_read_useful();
+  uint8_t l_us_useful_measurement = us_read_useful();
 
-  ////////////////////////////////////////////////////////////
-  //////////////////// UPDATE RUNNING AVERAGE ////////////////
-  ////////////////////////////////////////////////////////////
-  s_running_avg_useful_measurement = RUNNING_AVG_BETA * s_running_avg_useful_measurement + RUNNING_AVG_ALPHA * (double)g_us_useful_measurement;
-  
-  Serial.println(s_running_avg_useful_measurement);
+  // period computed from ultrasonic useful measurement
+  uint32_t l_period_us =
+    (double)(255 - l_us_useful_measurement) // USEFUL COMPLIMENT
+    * CONVERSION_FACTOR                     // CONVERSION RATIO
+    + (double)MIN_BEEP_PERIOD_us;           // OFFSET
 
-  // max 255, min 0
-  uint8_t l_us_quantized_measurement = round((double)s_running_avg_useful_measurement * (double)QUANTIZATION_LEVELS / (double)255);
-
-  // Serial.println(l_us_quantized_measurement);
-
-  ////////////////////////////////////////////////////////////
-  ////////////////// LATCH THE QUANTIZED VALUE ///////////////
-  ////////////////////////////////////////////////////////////
-  if (l_us_quantized_measurement == s_previous_quantized_measurement) return true;
-  s_previous_quantized_measurement = l_us_quantized_measurement;
-
-  if (g_sp_pulse_task) {
-    // cancel pulse task (ONLY IF CURRENTLY RUNNING)
-    g_us_timer.cancel(g_sp_pulse_task);
-    g_sp_pulse_task = nullptr;
-  }
-
-  ////////////////////////////////////////////////////////////
-  ////////////// IF CUTOFF, DON'T START PULSE TASK ///////////
-  ////////////////////////////////////////////////////////////
-  if (l_us_quantized_measurement == 0) {
-    sp_drive_amount(0); // we never want to get stuck at a note. Always clear the drive amount.
-    return true;
-  }
-
-  // COMPUTE FREQUENCY BASED ON INVERSE-DISTANCE
-  uint32_t frequency_mHz = (uint32_t)l_us_quantized_measurement * ((uint32_t)MAX_FREQUENCY_mHz - (uint32_t)MIN_FREQUENCY_mHz) / (uint32_t)QUANTIZATION_LEVELS + (uint32_t)MIN_FREQUENCY_mHz;
-
-  // Serial.println(frequency_mHz);
-
-  uint32_t period_us = 1000000000 / frequency_mHz;
-
-  // Serial.println(period_us);
-
-  // Serial.println(g_us_timer.size());
-
-  // sp_pulse(nullptr); // pulse once to make sure we emit SOME noise when quantized level is transitioning
-  g_sp_pulse_task = g_us_timer.every(period_us, sp_pulse);
+  g_us_timer.in(l_period_us, update_us_data_and_beep);
   
   return true;
 }
@@ -232,7 +183,6 @@ bool update_co_data(void*)
 
 void setup() {
   Serial.begin(9600);
-  g_sp_pulse_task = nullptr;
   sleep(2);
   LOG("----------------");
   LOG("DEVICE BOOTED UP: GLASSES");
@@ -241,7 +191,7 @@ void setup() {
   co_init();
   sp_init();
   sleep(1);
-  g_us_timer.every(50000, update_us_data);
+  g_us_timer.in(50000, update_us_data_and_beep);
   // g_us_timer.every(250000, update_co_data);
   // g_us_timer.every(50000,  print_measurements);
 }
