@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction } from 'react';
+import { ThemeContext } from '@/app/_layout';
+import { Dispatch, SetStateAction, useContext } from 'react';
 import { View, Text, AccessibilityInfo } from 'react-native'
 import VerticalSlider from 'rn-vertical-slider'; 
 
@@ -10,6 +11,24 @@ interface CustomSliderProps {
 }
 
 const CustomSlider: React.FC<CustomSliderProps> = ({ sliderName, step, value, setValue }) => {
+  const [dark, _] = useContext(ThemeContext);
+
+  const darkTheme = (dark) => {
+    if (dark) {
+      return {
+        textColor: "black",
+        backgroundSlider: "#333333",
+        controlledSlider: "#12B995"
+      }
+    } else {
+      return {
+        textColor: "white",
+        backgroundSlider: "#EAEAEA",
+        controlledSlider: "#40A38E"
+      }
+    }
+  }
+
   return (
     <View
       accessible={true}
@@ -32,8 +51,8 @@ const CustomSlider: React.FC<CustomSliderProps> = ({ sliderName, step, value, se
           min={0}
           max={100}
           borderRadius={5}
-          minimumTrackTintColor="#40A38E"
-          maximumTrackTintColor="#EAEAEA"
+          minimumTrackTintColor={darkTheme(dark).controlledSlider}
+          maximumTrackTintColor={darkTheme(dark).backgroundSlider}
           showIndicator
           renderIndicator={() => (
             <View
@@ -44,7 +63,7 @@ const CustomSlider: React.FC<CustomSliderProps> = ({ sliderName, step, value, se
                 alignItems: 'center',
                 }}
             >
-                <Text style={{ color: '#ffffff' }}>{value}</Text>
+                <Text style={{ color: darkTheme(dark).textColor }}>{value}</Text>
             </View>
           )}
           containerStyle={{ borderRadius: 50 }}

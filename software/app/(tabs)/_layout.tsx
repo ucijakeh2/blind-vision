@@ -1,6 +1,8 @@
 import { Tabs } from "expo-router";
 import { Image, View } from "react-native";
 import icons from "@/constants/icons";
+import { useContext } from "react";
+import { ThemeContext } from "../_layout";
 
 const TabIcon = ({ icon, color, name, focused }) => {
     return (
@@ -16,17 +18,37 @@ const TabIcon = ({ icon, color, name, focused }) => {
 }
 
 export default function TabsLayout() {
+    const [dark, _] = useContext(ThemeContext)
+
+    const darkTheme = (dark) => {
+        if (dark) {
+            return {
+                tabBarInactiveTintColor: "white",
+                borderColor: "#1F1F1F",
+                backgroundColor: "#0F0F0F"
+            }
+        } else {
+            return {
+                tabBarInactiveTintColor: "#434343",
+                borderColor: "#FDFDFD",
+                backgroundColor: "white"
+            }
+        }
+    }
+
     return (
         <>
             <Tabs
                 screenOptions={{
                     headerShown: false,
                     tabBarActiveTintColor: "#0059FF",
-                    tabBarInactiveTintColor: "#434343",
+                    tabBarInactiveTintColor: darkTheme(dark).tabBarInactiveTintColor,
                     tabBarStyle: {
                         paddingTop: 10,
                         borderTopWidth: 1,
-                        height: 75
+                        height: 75,
+                        borderColor: darkTheme(dark).borderColor,
+                        backgroundColor: darkTheme(dark).backgroundColor
                     }
                 }}
             >

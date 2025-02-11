@@ -2,11 +2,12 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { Link, type LinkProps } from 'expo-router'
 import { Button } from 'react-native-paper'
 import { View, Image } from 'react-native'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import CustomStatusBanner from './CustomStatusBanner'
 import CustomSlider from './CustomSlider'
 import ble from '@/constants/ble'
+import { ThemeContext } from '@/app/_layout'
 
 const STEP = 10;
 
@@ -30,14 +31,29 @@ const CustomDeviceCard: React.FC<CustomDeviceCardProps> = ({
     bleId
 }) => {
   const [value, setValue] = useState(0);
+  const [dark, _] = useContext(ThemeContext);
 
   useEffect(() => { ble.write(bleId, [index, value / STEP]); }, [value])
+
+  const darkTheme = (dark) => {
+    if (dark) {
+      return {
+        gradientTo: "#112A3A",
+        buttonColor: "black"
+      }
+    } else {
+      return {
+        gradientTo: "#CEE7F8",
+        buttonColor: "white"
+      }
+    }
+  }
 
   return (
     <View className='shadow shadow-neutral-400 h-2/5 w-11/12 rounded-3xl'>
       <LinearGradient
         className='h-full rounded-3xl flex flex-row items-center justify-start p-6'
-        colors={['#40A2E3', '#CEE7F8']} 
+        colors={['#40A2E3', darkTheme(dark).gradientTo]} 
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
       >
@@ -49,8 +65,8 @@ const CustomDeviceCard: React.FC<CustomDeviceCardProps> = ({
             <Button
               className="w-full"
               mode="outlined"
-              textColor="white"
-              theme={{colors: { outline: "white" }}}
+              textColor={darkTheme(dark).buttonColor}
+              theme={{colors: { outline: darkTheme(dark).buttonColor }}}
             >
                 {`${deviceName} Settings`}
             </Button>
