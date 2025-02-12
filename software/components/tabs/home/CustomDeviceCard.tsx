@@ -38,11 +38,13 @@ const CustomDeviceCard: React.FC<CustomDeviceCardProps> = ({
   const darkTheme = (dark) => {
     if (dark) {
       return {
-        gradientTo: "#112A3A",
-        buttonColor: "black"
+        gradientFrom: "#173A51",
+        gradientTo: "#2473A8",
+        buttonColor: "#2D2D2D"
       }
     } else {
       return {
+        gradientFrom: "#40A2E3",
         gradientTo: "#CEE7F8",
         buttonColor: "white"
       }
@@ -53,7 +55,7 @@ const CustomDeviceCard: React.FC<CustomDeviceCardProps> = ({
     <View className='shadow shadow-neutral-400 h-2/5 w-11/12 rounded-3xl'>
       <LinearGradient
         className='h-full rounded-3xl flex flex-row items-center justify-start p-6'
-        colors={['#40A2E3', darkTheme(dark).gradientTo]} 
+        colors={[darkTheme(dark).gradientFrom, darkTheme(dark).gradientTo]} 
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
       >

@@ -1,10 +1,11 @@
 
-import { Link, Redirect, useRouter } from "expo-router";
-import { useContext, useEffect } from "react";
-import { Text, View } from "react-native";
-import { AuthContext } from "./_layout";
-import { SystemBars } from "react-native-edge-to-edge";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { SystemBars } from "react-native-edge-to-edge";
+import { useContext, useEffect } from "react";
+import { Link, useRouter } from "expo-router";
+import { Text } from "react-native";
+
+import { AuthContext } from "./_layout";
 
 export default function App() {
   const router = useRouter()

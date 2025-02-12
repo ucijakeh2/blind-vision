@@ -1,7 +1,7 @@
-import { Stack } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PaperProvider } from "react-native-paper";
-import { createContext, useState, Dispatch, SetStateAction, useEffect } from "react";
+import { createContext, useState } from "react";
+import { Stack } from "expo-router";
 
 type ContextType = [boolean, () => void];
 export const ThemeContext = createContext<ContextType>([false, () => {}]);

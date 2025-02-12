@@ -1,9 +1,9 @@
 import BleManager, { Peripheral } from 'react-native-ble-manager';
-import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useContext, useEffect, useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { SystemBars } from 'react-native-edge-to-edge';
 import { Button } from "react-native-paper";
 import { Image } from "react-native";
-import { SystemBars } from 'react-native-edge-to-edge';
 
 import CustomDeviceCard from "@/components/tabs/home/CustomDeviceCard";
 import HomeLabel from "@/components/tabs/home/HomeLabel";
@@ -12,6 +12,7 @@ import backgrounds from "@/constants/backgrounds";
 import images from "@/constants/images";
 import styles from "@/constants/styles";
 import ble from "@/constants/ble";
+
 import { ThemeContext } from '../_layout';
 
 const BLEButton: React.FC<{
@@ -78,8 +79,8 @@ export default function Home() {
                     /> :
                     <>
                         <Image 
-                            className={styles.tabs.headerImageStyle} 
-                            source={backgrounds.home}
+                            className={`${styles.tabs.headerImageStyle} -my-5`} 
+                            source={dark ? backgrounds.darkHome : backgrounds.home}
                         />
                         <HomeLabel firstName="Huy"/>
                         <CustomDeviceCard

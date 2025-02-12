@@ -1,6 +1,6 @@
-import { Keyboard, StyleSheet, Text, TouchableWithoutFeedback, View, Button } from "react-native";
+import { Keyboard, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
-import { Link, useRouter, Redirect } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { useContext, useState } from "react";
 
 import ThemedTextInput from "@/components/auth/ThemedTextInput";

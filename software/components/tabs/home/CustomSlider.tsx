@@ -16,9 +16,9 @@ const CustomSlider: React.FC<CustomSliderProps> = ({ sliderName, step, value, se
   const darkTheme = (dark) => {
     if (dark) {
       return {
-        textColor: "black",
+        textColor: "#2A2A2A",
         backgroundSlider: "#333333",
-        controlledSlider: "#12B995"
+        controlledSlider: "#0B705A"
       }
     } else {
       return {
@@ -45,7 +45,7 @@ const CustomSlider: React.FC<CustomSliderProps> = ({ sliderName, step, value, se
           value={value}
           onComplete={(value: number) => AccessibilityInfo.announceForAccessibility(`${sliderName} set to ${value}%`)}
           onChange={(value: number) => setValue(value)}
-          height={240}
+          height={255}
           width={40}
           step={step}
           min={0}
