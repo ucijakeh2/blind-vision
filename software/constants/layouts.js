@@ -61,7 +61,8 @@ const profile = [
     {
         title: "Log Out",
         imageSource: logOutIcon,
-        destination: "/settings/profile/log-out",
+        destination: "/(auth)/sign-in",
+        replace: true,
     },
     {
         title: "Reset Password",

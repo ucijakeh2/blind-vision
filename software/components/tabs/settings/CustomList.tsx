@@ -80,8 +80,12 @@ const ListItem: React.FC<{
       accessibilityLabel={myAccessibilityLabel}
       style={{ borderBottomWidth: 1, borderBottomColor: "#BFBFBF", paddingLeft: 20, paddingVertical: 15 }}
       onPress={() => { 
-        if( obj.destination !== undefined ) { router.push(obj.destination as RelativePathString) }
-        else if ( obj.status === undefined ) { setDark(!dark) }
+        if ( obj.destination !== undefined ) { 
+          if ( obj.replace !== undefined ) {
+            router.dismissAll();
+            router.replace(obj.destination as RelativePathString);
+          } else { router.push(obj.destination as RelativePathString) }
+        } else if ( obj.status === undefined ) { setDark(!dark) }
       }}
     />
   )
