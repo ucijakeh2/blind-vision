@@ -1,4 +1,5 @@
 import { Keyboard, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from 'expo-linear-gradient';
 import { Link, useRouter } from "expo-router";
 import { useState } from "react";
@@ -12,7 +13,7 @@ import styles from "@/constants/styles";
 export default function SignIn() {
     const router = useRouter()
     const [email, setEmail] = useState("");
-    const [firstName, setFirstName] = useState("");
+    const [nickname, setNickname] = useState("");
     const [password, setPassword] = useState("");
     const [confirmedPassword, setConfirmedPassword] = useState("");
     const [reqSignUp, setSignUp] = useState(false);
@@ -51,9 +52,9 @@ export default function SignIn() {
                                     outlineColor="#699F89"
                                 />
                                 <ThemedTextInput 
-                                    label="First Name"
-                                    text={firstName}
-                                    setText={setFirstName}
+                                    label="Nickname"
+                                    text={nickname}
+                                    setText={setNickname}
                                     outlineColor="#699F89"
                                 />
                                 <ThemedTextInput 
@@ -61,18 +62,25 @@ export default function SignIn() {
                                     text={password}
                                     setText={setPassword}
                                     outlineColor="#699F89"
+                                    isPassword
                                 />
                                 <ThemedTextInput 
                                     label="Confirm Password"
                                     text={confirmedPassword}
                                     setText={setConfirmedPassword}
                                     outlineColor="#699F89"
+                                    isPassword
                                 />
                                 <ThemedButton 
                                     customNativeWind="bg-buttonGreen rounded"
                                     text="Sign Up"
                                     textColor="white"
-                                    trigger={() => {}}
+                                    trigger={async () => {
+                                        const key = [email, password].toString()
+                                        const value = { nickname: nickname }
+                                        await AsyncStorage.setItem(key, JSON.stringify(value))
+                                        console.log(`Stored: ${key} ${value} `)
+                                    }}
                                 />
                             </View>
                             <View className="border-t">
