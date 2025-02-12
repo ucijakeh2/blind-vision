@@ -13,7 +13,7 @@ import images from "@/constants/images";
 import styles from "@/constants/styles";
 import ble from "@/constants/ble";
 
-import { ThemeContext } from '../_layout';
+import { NicknameContext, ThemeContext } from '../_layout';
 
 const BLEButton: React.FC<{
     isLoading: boolean,
@@ -42,7 +42,8 @@ const BLEButton: React.FC<{
 export default function Home() {
     const [device, setDevice] = useState<Peripheral | null>(null);
     const [isScanning, setScanning] = useState<boolean>(false);
-    const [dark, _] = useContext(ThemeContext)
+    const [dark, _1] = useContext(ThemeContext);
+    const [nickname, _2] = useContext(NicknameContext);
 
     useEffect(() => {
         ble.requestPermissions();
@@ -83,7 +84,7 @@ export default function Home() {
                             className={`${styles.tabs.headerImageStyle} -my-5`} 
                             source={dark ? backgrounds.darkHome : backgrounds.home}
                         />
-                        <HomeLabel firstName="Huy"/>
+                        <HomeLabel nickname={nickname}/>
                         <CustomDeviceCard
                             index={0}
                             deviceName="Glasses"
