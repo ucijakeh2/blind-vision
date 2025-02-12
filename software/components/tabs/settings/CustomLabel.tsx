@@ -14,7 +14,7 @@ const CustomLabel: React.FC<{ text: string, includeBackButton?: boolean }> = ({ 
         </Text>
         { includeBackButton && 
           <Button
-            className='border-2 border-white'
+            className='border-2'
             mode='outlined'
             icon={() => (
               <Icon

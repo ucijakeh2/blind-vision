@@ -32,6 +32,7 @@ const BLEButton: React.FC<{
             loading={isLoading}
             disabled={isLoading}
             labelStyle={{ fontSize: 16 }}
+            icon="bluetooth"   
         >
             Connect Glasses & Stick
         </Button>

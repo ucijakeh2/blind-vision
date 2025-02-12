@@ -3,7 +3,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { SystemBars } from "react-native-edge-to-edge";
 import { useContext, useEffect } from "react";
 import { Link, useRouter } from "expo-router";
-import { Text } from "react-native";
+import { Button } from "react-native-paper";
+import { Text, Image } from "react-native";
+
+import logo from "@/constants/logo";
 
 import { AuthContext } from "./_layout";
 
@@ -14,7 +17,6 @@ export default function App() {
   // In-progress: this should be changed to if user logged in
   useEffect(() => {
     if(authorized) {
-      console.log("if");
       router.dismiss();
       router.replace("/(tabs)/home")
     }
@@ -27,11 +29,29 @@ export default function App() {
         style={{
           flex: 1,
           justifyContent: "center",
-          alignItems: "center"
+          alignItems: "center",
+          backgroundColor: "white",
+          gap: 25
         }}
       >
-        <Text className="text-red-500 text-2xl font-bold">Edit app/index.tsx to edit this screen.</Text>
-        <Link href="/sign-in">Go to auth</Link>
+        <Text
+          className="text-xl font-bold text-buttonGreen"
+        >
+          Thanks for choosing Blind Vision!
+        </Text>
+        <Image
+          className="w-[327px] h-[170px]"
+          source={logo.animated}
+        />
+        <Link href="/sign-in">
+          <Button
+            mode="contained"
+            labelStyle={{color: "white"}}
+            theme={{ colors: { primary: "#2AB2DB" }}}
+          >
+              Continue
+          </Button>
+        </Link>
       </SafeAreaView>
     </>
   );
