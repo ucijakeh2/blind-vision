@@ -5,6 +5,7 @@ import { useContext, useState } from "react";
 import { Link } from "expo-router";
 
 import ThemedTextInput from "@/components/auth/ThemedTextInput";
+import ThemedSnackbar from "@/components/auth/ThemedSnackbar";
 import ThemedButton from "@/components/auth/ThemedButton";
 import AuthLabel from "@/components/auth/AuthLabel";
 
@@ -15,6 +16,9 @@ import { AuthContext, NicknameContext } from "../_layout";
 export default function SignIn() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [snackBarMessage, setSnackBarMessage] = useState("");
+    const [snackBarVisibility, setSnackBarVisibility] = useState(false);
+
     const [_1, setLogIn] = useContext(AuthContext);
     const [_2, setNickname] = useContext(NicknameContext);
 
@@ -54,7 +58,9 @@ export default function SignIn() {
                                         const stringValue = await AsyncStorage.getItem(key)
                                         const value = stringValue ? JSON.parse(stringValue) : null
                                         console.log(`Value: ${value}`)
+
                                         if (value) { setLogIn(); setNickname(value.nickname); } 
+                                        else { setSnackBarVisibility(true); setSnackBarMessage("Wrong email or password"); }
                                     }}
                                 />
                                 <Text className="mb-6 mx-auto">
@@ -90,6 +96,12 @@ export default function SignIn() {
                                 </Text>
                             </View>
                         </View>
+                        <ThemedSnackbar
+                            visible={snackBarVisibility}
+                            isError={true}
+                            message={snackBarMessage}
+                            setVisibility={setSnackBarVisibility}
+                        />
                     </View>
                 </LinearGradient>
             </View>

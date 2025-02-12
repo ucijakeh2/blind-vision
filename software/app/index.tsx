@@ -1,4 +1,5 @@
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SystemBars } from "react-native-edge-to-edge";
 import { useContext, useEffect } from "react";
@@ -13,14 +14,24 @@ import { AuthContext } from "./_layout";
 export default function App() {
   const router = useRouter()
   const [authorized, _] = useContext(AuthContext)
+  
+  useEffect(() => { 
+    // Reset storage every reload
+    AsyncStorage.clear(); 
 
-  // In-progress: this should be changed to if user logged in
+    // Create a demo user every reload
+    const key = ["demo@gmail.com", "blindvision"].toString();
+    const value = JSON.stringify({nickname: "Blind Vision"});
+    AsyncStorage.setItem(key, value);
+  }, [])
+
   useEffect(() => {
     if(authorized) {
       router.dismiss();
-      router.replace("/(tabs)/home")
+      router.replace("/(tabs)/home");
     }
   }, [authorized])
+
 
   return (
     <>

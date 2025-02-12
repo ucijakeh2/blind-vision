@@ -5,6 +5,7 @@ import { Link, useRouter } from "expo-router";
 import { useState } from "react";
 
 import ThemedTextInput from "@/components/auth/ThemedTextInput";
+import ThemedSnackbar from "@/components/auth/ThemedSnackbar";
 import ThemedButton from "@/components/auth/ThemedButton";
 import AuthLabel from "@/components/auth/AuthLabel";
 
@@ -16,28 +17,73 @@ export default function SignIn() {
     const [nickname, setNickname] = useState("");
     const [password, setPassword] = useState("");
     const [confirmedPassword, setConfirmedPassword] = useState("");
-    const [reqSignUp, setSignUp] = useState(false);
+    
+    // Snackbar control
+    const [snackBar, setSnackBar] = useState({
+        visibile: false,
+        isError: false,
+        message: ""
+    });
+    
+    const setSnackBarVisibility = (visible: boolean) => { setSnackBar({...snackBar, visibile: visible}) }
 
-    // useEffect(() => {
-    //     if(reqSignUp) {
-    //         console.log(email, password)
-    //         setSignUp(false)
-    //     }
-    // }, [reqSignUp])
+    const isValidEmail = (email: string) => {
+        const isValid = email.includes("@") && email.includes(".com")
+        
+        if (!isValid) { 
+            setSnackBar({
+                visibile: true,
+                isError: true,
+                message: "Invalid email"
+            })
+        }
+
+        return isValid;
+    }
+
+    const isValidNickname = (nickname: string) => {
+        const isValid = nickname.length > 0
+        if (!isValid) { 
+            setSnackBar({
+                visibile: true,
+                isError: true,
+                message: "Must have a nickname"
+            })
+        }
+        return isValid;
+    }
+
+    const isValidPassword = (password: string) => {
+        const isValid = password.length >= 8
+        if (!isValid) { 
+            setSnackBar({
+                visibile: true,
+                isError: true,
+                message: "Invalid password (must have at least 8 characters)"
+            })
+        }
+        return isValid;
+    }
+
+    const isMatchingPassword = (password: string, confirmedPassword: string) => {
+        const isValid = (password === confirmedPassword)
+        if (!isValid) { 
+            setSnackBar({
+                visibile: true,
+                isError: true,
+                message: "Passwords do not match"
+            })
+        }
+        return isValid;
+    }
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={styleSheet.container}>
                 <LinearGradient 
                     colors={['#81DCD4', "#0D9276"]} 
-                    start={{
-                        x: 0,
-                        y: 0
-                    }}
-                    end={{
-                        x: 1,
-                        y: 0
-                    }}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
                     style={styleSheet.container}
                 >
                     <AuthLabel text="Sign Up"/>
@@ -76,10 +122,23 @@ export default function SignIn() {
                                     text="Sign Up"
                                     textColor="white"
                                     trigger={async () => {
-                                        const key = [email, password].toString()
-                                        const value = { nickname: nickname }
-                                        await AsyncStorage.setItem(key, JSON.stringify(value))
-                                        console.log(`Stored: ${key} ${value} `)
+                                        const isValid = isValidEmail(email) && 
+                                                        isValidNickname(nickname) &&
+                                                        isValidPassword(password) && 
+                                                        isMatchingPassword(password, confirmedPassword)
+
+                                        if (isValid) {
+                                            const key = [email, password].toString()
+                                            const value = { nickname: nickname }
+                                            await AsyncStorage.setItem(key, JSON.stringify(value))
+                                            console.log(`Stored: ${key} ${value} `)
+
+                                            setSnackBar({
+                                                visibile: true,
+                                                isError: false,
+                                                message: "Account created, you can log in now"
+                                            })
+                                        }
                                     }}
                                 />
                             </View>
@@ -108,6 +167,12 @@ export default function SignIn() {
                                 </Text>
                             </View>
                         </View>
+                        <ThemedSnackbar
+                            visible={snackBar.visibile}
+                            isError={snackBar.isError}
+                            message={snackBar.message}
+                            setVisibility={setSnackBarVisibility}
+                        />
                     </View>
                 </LinearGradient>
             </View>
@@ -117,7 +182,7 @@ export default function SignIn() {
 
 const styleSheet = StyleSheet.create({
     container: {
-        height: "100%"
+        height: "100%",
     },
     link: {
         color: "#0059FF",
