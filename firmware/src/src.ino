@@ -116,6 +116,25 @@ void loop() {
 }
 
 // TEST_SP
+#elif TEST_BL
+
+void setup() {
+  Serial.begin(9600);
+  sleep(2);
+  LOG("----------------");
+  LOG("TESTING BLE");
+  LOG("----------------");
+  bl_init();
+  sleep(1);
+}
+
+void loop() {
+  bool res = bl_send("Testing Send");
+  Serial.println("Send successful: " + String(res));
+  delay(2000);
+}
+
+// TEST_BL
 #elif GLASSES
 ///////////////////////////////////////////////////////////
 //////////// GENERIC RELEASE MAIN - GLASSES ///////////////
