@@ -226,31 +226,15 @@ void loop() {
 ///////////// GENERIC RELEASE MAIN - STICK ////////////////
 ///////////////////////////////////////////////////////////
 
-// ultrasonic measurement
-uint8_t g_us_useful_measurement;
-
-bool update_us_data(void*)
+bool update_us_measurement_and_va_drive(void*)
 {
-  g_us_useful_measurement = us_read_useful();
+  // collect ultrasonic measurement
+  uint8_t l_us_useful_measurement = us_read_useful();
+
+  va_drive(l_us_useful_measurement);
+  
   return true;
 }
-
-bool update_va_drive(void*)
-{
-  constexpr uint8_t MIN_DRIVE_AMOUNT = 140;
-  constexpr uint8_t MAX_DRIVE_AMOUNT = 255;
-  constexpr uint8_t DRIVE_AMOUNT_RANGE = MAX_DRIVE_AMOUNT - MIN_DRIVE_AMOUNT;
-
-  uint8_t l_drive_amount = 
-    g_us_useful_measurement == 0 ?
-    0 : // cutoff
-    (double)g_us_useful_measurement * (double)DRIVE_AMOUNT_RANGE/(double)255 + (double)MIN_DRIVE_AMOUNT;
-
-  va_drive(l_drive_amount);
-  return true;
-}
-
-auto timer = timer_create_default();
 
 void setup() {
   Serial.begin(9600);
@@ -259,13 +243,13 @@ void setup() {
   LOG("DEVICE BOOTED UP: STICK");
   LOG("----------------");
   va_init();
+  bl_init();
   sleep(1);
-  timer.every(50, update_us_data);
-  timer.every(50, update_va_drive);
+  g_us_timer.every(50000, update_us_measurement_and_va_drive);
 }
 
 void loop() {
-  timer.tick();
+  g_us_timer.tick();
   delay(1);
 }
 

@@ -3,6 +3,9 @@
 #include <BLEUtils.h>
 #include <BLE2902.h>
 
+#include "bl.h"
+#include "va.h"
+
 // BLE Service and Characteristic UUIDs
 #define SERVICE_UUID        "12345678-1234-1234-1234-123456789abc"
 #define CHARACTERISTIC_UUID "abcd1234-ab12-cd34-ef56-1234567890ab"
@@ -40,12 +43,28 @@ class MyCallbacks : public BLECharacteristicCallbacks {
     Serial.print("Received: ");
     Serial.println(value);
 
-    #else
+    #elif GLASSES
     ///////////////////////////
-    ///// IN CASE OF PRODUCTION MODE
+    ///// IN CASE OF PRODUCTION MODE : GLASSES
     ///////////////////////////
 
+    #else
+    ///////////////////////////
+    ///// IN CASE OF PRODUCTION MODE : STICK
+    ///////////////////////////
+
+    Serial.print("Received: ");
+
+    // extract control byte
+    uint8_t l_byte = value[0];
+
+    double l_va_slope_factor = (double)l_byte / (double)255;
+
+    Serial.println(l_byte);
+    Serial.println("Slope Factor: " + String(l_va_slope_factor));
     
+    // configure vibrating actuator slope factor
+    va_slope_factor(l_va_slope_factor);
 
     #endif
 
