@@ -7,8 +7,17 @@
 #include "va.h"
 
 // BLE Service and Characteristic UUIDs
+#if GLASSES
+
+#define SERVICE_UUID        "22345678-1234-1234-1234-123456789abc"
+#define CHARACTERISTIC_UUID "abcd1234-ab12-cd34-ef56-1234567890ab"
+
+#else
+
 #define SERVICE_UUID        "12345678-1234-1234-1234-123456789abc"
 #define CHARACTERISTIC_UUID "abcd1234-ab12-cd34-ef56-1234567890ab"
+
+#endif
 
 BLECharacteristic *pCharacteristic;
 bool deviceConnected = false;
