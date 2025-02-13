@@ -1,8 +1,8 @@
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Link, type LinkProps } from 'expo-router'
 import { Button } from 'react-native-paper'
 import { View, Image } from 'react-native'
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
 
 import CustomStatusBanner from './CustomStatusBanner'
 import CustomSlider from './CustomSlider'
@@ -12,7 +12,6 @@ import { ThemeContext } from '@/app/_layout'
 const STEP = 10;
 
 interface CustomDeviceCardProps {
-    index: number,
     deviceName: string,
     sliderName: string,
     destination: LinkProps["href"],
@@ -24,7 +23,6 @@ interface CustomDeviceCardProps {
 }
 
 const CustomDeviceCard: React.FC<CustomDeviceCardProps> = ({
-    index,
     deviceName,
     sliderName,
     destination,
@@ -79,13 +77,10 @@ const CustomDeviceCard: React.FC<CustomDeviceCardProps> = ({
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
       >
-        <CustomSlider 
-          sliderName={sliderName} 
-          step={STEP} 
-          value={value} 
-          setValue={setValue} 
-          disabled={false}
-        />
+        {connected ?
+          <CustomSlider sliderName={sliderName} step={STEP} value={value} setValue={setValue} disabled={false}/>:
+          <><CustomSlider sliderName={sliderName} step={STEP} value={value} setValue={setValue} disabled={true}/></>
+        }
         <Image className='absolute -right-4 top-1/4 scale-90' source={imageSource}/>
         <View className='h-full flex-1 flex flex-col items-end justify-between ml-6'>
           <CustomStatusBanner connected={connected}/>

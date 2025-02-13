@@ -1,7 +1,8 @@
-import { ThemeContext } from '@/app/_layout';
 import { Dispatch, SetStateAction, useContext } from 'react';
 import { View, Text, AccessibilityInfo } from 'react-native'
-import VerticalSlider from 'rn-vertical-slider'; 
+import VerticalSlider from 'rn-vertical-slider';
+ 
+import { ThemeContext } from '@/app/_layout';
 
 interface CustomSliderProps {
     sliderName: string,

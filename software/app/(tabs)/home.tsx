@@ -123,7 +123,6 @@ export default function Home() {
                         />
                         <HomeLabel nickname={auth ? auth.value : "null"}/>
                         <CustomDeviceCard
-                            index={0}
                             deviceName="Glasses"
                             sliderName="Glasses volume"
                             destination="/settings/glasses"
@@ -134,7 +133,6 @@ export default function Home() {
                             serviceUUID={SERVICE_UUID_GLASSES}
                         />
                         <CustomDeviceCard
-                            index={1}
                             deviceName="Stick"
                             sliderName="Blind stick vibration"
                             destination="/settings/stick"
