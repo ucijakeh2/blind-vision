@@ -1,19 +1,22 @@
-import BleManager, { Peripheral } from 'react-native-ble-manager';
 import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SystemBars } from 'react-native-edge-to-edge';
+import BleManager, { Peripheral } from 'react-native-ble-manager';
 import { Button } from "react-native-paper";
 import { Image } from "react-native";
 
 import CustomDeviceCard from "@/components/tabs/home/CustomDeviceCard";
+import ThemedSnackbar from "@/components/auth/ThemedSnackbar";
 import HomeLabel from "@/components/tabs/home/HomeLabel";
 
 import backgrounds from "@/constants/backgrounds";
 import images from "@/constants/images";
 import styles from "@/constants/styles";
-import ble from "@/constants/ble";
 
-import { NicknameContext, ThemeContext } from '../_layout';
+import ble from "@/scripts/ble";
+
+import { AuthContext, ThemeContext } from '../_layout';
+import { DeviceContext } from './_layout';
 
 const BLEButton: React.FC<{
     isLoading: boolean,
@@ -40,10 +43,13 @@ const BLEButton: React.FC<{
 }
 
 export default function Home() {
-    const [device, setDevice] = useState<Peripheral | null>(null);
     const [isScanning, setScanning] = useState<boolean>(false);
+    const [visible, setVisibility] = useState<boolean>(false);
+    const [message, setSnackBarMessage] = useState<string>("");
+
     const [dark, _1] = useContext(ThemeContext);
-    const [nickname, _2] = useContext(NicknameContext);
+    const [auth, _2] = useContext(AuthContext);
+    const [device, setDevice] = useContext(DeviceContext);
 
     useEffect(() => {
         ble.requestPermissions();
@@ -53,7 +59,12 @@ export default function Home() {
 
     useEffect(() => {
         // Listen to when ESP32 disconnect
-        const onStopDisconnectListener = BleManager.onDisconnectPeripheral(() => { setDevice(null); })
+        const onStopDisconnectListener = BleManager.onDisconnectPeripheral(() => { 
+            setDevice(null);
+            setVisibility(true);
+            setSnackBarMessage("Devices disconnected");
+        })
+
         return () => { onStopDisconnectListener.remove(); }
     }, [])
 
@@ -65,26 +76,40 @@ export default function Home() {
                 style={{backgroundColor: dark ? "#222222" : "white"}}
             >
                 {!device ?
-                    <BLEButton 
-                    trigger={async () => {
-                        // Only scan & connect if BLE is enabled
-                        // Ask for it otherwise
-                        if(await ble.enableBLE()) {
-                            setScanning(true)
-                            const connectedDevice: any = await ble.scanThenConnect();
-                            console.log("Returned connected device: " + connectedDevice);
-                            setDevice(connectedDevice);
-                            setScanning(false);
-                        }
-                    }} 
-                    isLoading={isScanning}
-                    /> :
+                    <>
+                        <ThemedSnackbar
+                            message={message}
+                            isError={true}
+                            visible={visible}
+                            setVisibility={setVisibility}
+                        />
+                        <BLEButton 
+                            trigger={async () => {
+                                // Only scan & connect if BLE is enabled
+                                // Ask for it otherwise
+                                if(await ble.enableBLE()) {
+                                    setScanning(true)
+                                    const connectedDevice: Peripheral | null = await ble.scanThenConnect();
+                                    console.log("Returned connected device: " + connectedDevice);
+
+                                    if (!connectedDevice) {
+                                        setVisibility(true);
+                                        setSnackBarMessage("Cannot find devices.");
+                                    }
+
+                                    setDevice(connectedDevice);
+                                    setScanning(false);
+                                }
+                            }} 
+                            isLoading={isScanning}
+                        />
+                    </> :
                     <>
                         <Image 
                             className={`${styles.tabs.headerImageStyle} -my-5`} 
                             source={dark ? backgrounds.darkHome : backgrounds.home}
                         />
-                        <HomeLabel nickname={nickname}/>
+                        <HomeLabel nickname={auth ? auth.value : "null"}/>
                         <CustomDeviceCard
                             index={0}
                             deviceName="Glasses"

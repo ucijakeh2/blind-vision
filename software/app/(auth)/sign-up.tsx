@@ -9,6 +9,7 @@ import ThemedSnackbar from "@/components/auth/ThemedSnackbar";
 import ThemedButton from "@/components/auth/ThemedButton";
 import AuthLabel from "@/components/auth/AuthLabel";
 
+import { isValidEmail, isValidNickname, isValidPassword, isMatchingPassword } from "@/scripts/validityCheck";
 import styles from "@/constants/styles";
 
 export default function SignIn() {
@@ -20,62 +21,12 @@ export default function SignIn() {
     
     // Snackbar control
     const [snackBar, setSnackBar] = useState({
-        visibile: false,
+        visible: false,
         isError: false,
         message: ""
     });
     
-    const setSnackBarVisibility = (visible: boolean) => { setSnackBar({...snackBar, visibile: visible}) }
-
-    const isValidEmail = (email: string) => {
-        const isValid = email.includes("@") && email.includes(".com")
-        
-        if (!isValid) { 
-            setSnackBar({
-                visibile: true,
-                isError: true,
-                message: "Invalid email"
-            })
-        }
-
-        return isValid;
-    }
-
-    const isValidNickname = (nickname: string) => {
-        const isValid = nickname.length > 0
-        if (!isValid) { 
-            setSnackBar({
-                visibile: true,
-                isError: true,
-                message: "Must have a nickname"
-            })
-        }
-        return isValid;
-    }
-
-    const isValidPassword = (password: string) => {
-        const isValid = password.length >= 8
-        if (!isValid) { 
-            setSnackBar({
-                visibile: true,
-                isError: true,
-                message: "Invalid password (must have at least 8 characters)"
-            })
-        }
-        return isValid;
-    }
-
-    const isMatchingPassword = (password: string, confirmedPassword: string) => {
-        const isValid = (password === confirmedPassword)
-        if (!isValid) { 
-            setSnackBar({
-                visibile: true,
-                isError: true,
-                message: "Passwords do not match"
-            })
-        }
-        return isValid;
-    }
+    const setSnackBarVisibility = (visible: boolean) => { setSnackBar({...snackBar, visible: visible}) }
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -122,10 +73,10 @@ export default function SignIn() {
                                     text="Sign Up"
                                     textColor="white"
                                     trigger={async () => {
-                                        const isValid = isValidEmail(email) && 
-                                                        isValidNickname(nickname) &&
-                                                        isValidPassword(password) && 
-                                                        isMatchingPassword(password, confirmedPassword)
+                                        const isValid = isValidEmail(email, setSnackBar) && 
+                                                        isValidNickname(nickname, setSnackBar) &&
+                                                        isValidPassword(password, setSnackBar) && 
+                                                        isMatchingPassword(password, confirmedPassword, setSnackBar)
 
                                         if (isValid) {
                                             const key = [email, password].toString()
@@ -134,7 +85,7 @@ export default function SignIn() {
                                             console.log(`Stored: ${key} ${value} `)
 
                                             setSnackBar({
-                                                visibile: true,
+                                                visible: true,
                                                 isError: false,
                                                 message: "Account created, you can log in now"
                                             })
@@ -168,7 +119,7 @@ export default function SignIn() {
                             </View>
                         </View>
                         <ThemedSnackbar
-                            visible={snackBar.visibile}
+                            visible={snackBar.visible}
                             isError={snackBar.isError}
                             message={snackBar.message}
                             setVisibility={setSnackBarVisibility}

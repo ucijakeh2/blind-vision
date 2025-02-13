@@ -1,10 +1,14 @@
+import { createContext, Dispatch, SetStateAction, useContext, useState } from "react";
+import { Peripheral } from "react-native-ble-manager";
 import { Image, View } from "react-native";
-import { useContext } from "react";
 import { Tabs } from "expo-router";
 
 import icons from "@/constants/icons";
 
 import { ThemeContext } from "../_layout";
+
+type PeripheralContextType = [Peripheral | null, Dispatch<SetStateAction<Peripheral | null>>]
+export const DeviceContext = createContext<PeripheralContextType>([null, () => {}])
 
 const TabIcon = ({ icon, color, name, focused }) => {
     return (
@@ -21,8 +25,9 @@ const TabIcon = ({ icon, color, name, focused }) => {
 
 export default function TabsLayout() {
     const [dark, _] = useContext(ThemeContext)
+    const [device, setDevice] = useState<Peripheral | null>(null);
 
-    const darkTheme = (dark) => {
+    const darkTheme = (dark: boolean) => {
         if (dark) {
             return {
                 tabBarInactiveTintColor: "white",
@@ -39,7 +44,7 @@ export default function TabsLayout() {
     }
 
     return (
-        <>
+        <DeviceContext.Provider value={[device, setDevice]}>
             <Tabs
                 screenOptions={{
                     headerShown: false,
@@ -100,6 +105,6 @@ export default function TabsLayout() {
                     }}
                 />
             </Tabs>
-        </>
+        </DeviceContext.Provider>
     )
 }

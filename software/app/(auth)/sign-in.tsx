@@ -1,8 +1,8 @@
 import { Keyboard, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useContext, useEffect, useState } from "react";
 import { LinearGradient } from 'expo-linear-gradient';
-import { useContext, useState } from "react";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 
 import ThemedTextInput from "@/components/auth/ThemedTextInput";
 import ThemedSnackbar from "@/components/auth/ThemedSnackbar";
@@ -11,16 +11,18 @@ import AuthLabel from "@/components/auth/AuthLabel";
 
 import styles from "@/constants/styles";
 
-import { AuthContext, NicknameContext } from "../_layout";
+import { AuthContext } from "../_layout";
 
 export default function SignIn() {
+    const router = useRouter()
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [snackBarMessage, setSnackBarMessage] = useState("");
     const [snackBarVisibility, setSnackBarVisibility] = useState(false);
 
-    const [_1, setLogIn] = useContext(AuthContext);
-    const [_2, setNickname] = useContext(NicknameContext);
+    const [auth, setAuthObject] = useContext(AuthContext);
+    
+    useEffect(() => { if (auth) { router.navigate("/(tabs)/home"); } }, [auth])
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -54,22 +56,24 @@ export default function SignIn() {
                                     text="Log In"
                                     textColor="white"
                                     trigger={ async () => {
-                                        const key = [email, password].toString()
+                                        const keys = [email, password]
+                                        const key = keys.toString()
                                         const stringValue = await AsyncStorage.getItem(key)
                                         const value = stringValue ? JSON.parse(stringValue) : null
-                                        console.log(`Value: ${value}`)
-
-                                        if (value) { setLogIn(); setNickname(value.nickname); } 
+                                        console.log("Value:", value);
+                                        
+                                        if (value) { setAuthObject({ key: keys, value: value.nickname }); console.log("Set auth");} 
                                         else { setSnackBarVisibility(true); setSnackBarMessage("Wrong email or password"); }
                                     }}
                                 />
+                                {/* 
                                 <Text className="mb-6 mx-auto">
-                                    {/* In-progess: this button is not working yet */}
                                     Forgot Password?{" "}
                                     <Link style={styleSheet.link} href={"/"}>
                                         Reset Password
                                     </Link>
                                 </Text>
+                                */}
                             </View>
                             <View className="border-t">
                                 <View className="mt-6 flex flex-row justify-around">

@@ -3,36 +3,25 @@ import { PaperProvider } from "react-native-paper";
 import { createContext, useState } from "react";
 import { Stack } from "expo-router";
 
-type BooleanContextType = [boolean, () => void];
-export const ThemeContext = createContext<BooleanContextType>([false, () => {}]);
-export const AuthContext = createContext<BooleanContextType>([false, () => {}]);
+type ThemeContextType = [boolean, () => void];
+export const ThemeContext = createContext<ThemeContextType>([false, () => {}]);
 
-type StringContextType = [string, (n: string) => void];
-export const NicknameContext = createContext<StringContextType>(["", () => {}]);
+type AuthObjectType = { key: string[], value: string } | null
+type AuthContextType = [AuthObjectType, (a: AuthObjectType) => void]
+export const AuthContext = createContext<AuthContextType>([null, () => {}]);
 
 export default function RootLayout() {
   const [dark, setDark] = useState<boolean>(false)
-  const [authorized, setAuthorized] = useState<boolean>(false)
-  const [nickname, setNickname] = useState<string>("")
+  const [auth, setAuth] = useState<AuthObjectType>(null)
   
-  const toggleDark = () => {
-    setDark((prev) => !prev)
-  }
-  
-  const toggleAuthorization = () => {
-    setAuthorized(true)
-  }
-
-  const assignNickname = (n: string) => {
-    setNickname(n)
-  }
+  const toggleDark = () => { setDark((prev) => !prev) }
+  const setAuthData = (a: AuthObjectType) => { setAuth(a) }
 
   return (
     <GestureHandlerRootView>
       <PaperProvider>
         <ThemeContext.Provider value={[dark, toggleDark]}>
-        <AuthContext.Provider value={[authorized, toggleAuthorization]}>
-        <NicknameContext.Provider value={[nickname, assignNickname]}>
+        <AuthContext.Provider value={[auth, setAuthData]}>
           <Stack>
             <Stack.Screen 
               name="index"
@@ -53,7 +42,6 @@ export default function RootLayout() {
               }}
             />
           </Stack>
-        </NicknameContext.Provider>
         </AuthContext.Provider>
         </ThemeContext.Provider>
       </PaperProvider>

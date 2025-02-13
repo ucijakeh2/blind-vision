@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from 'react'
 
 import CustomStatusBanner from './CustomStatusBanner'
 import CustomSlider from './CustomSlider'
-import ble from '@/constants/ble'
+import ble from '@/scripts/ble'
 import { ThemeContext } from '@/app/_layout'
 
 const STEP = 10;

@@ -49,9 +49,9 @@ const settings = [
 
 const profile = [
     {
-        title: "Name",
+        title: "Nickname",
         imageSource: nameIcon,
-        destination: "/settings/profile/name",
+        destination: "/settings/profile/nickname",
     },
     {
         title: "Email",

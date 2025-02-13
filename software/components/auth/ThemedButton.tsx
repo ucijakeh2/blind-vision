@@ -4,6 +4,7 @@ interface ThemedButtonProps {
     customNativeWind?: string
     icon?: string
     textColor?: string,
+    buttonColor?: string,
     text: string,
     trigger: () => void
 }
@@ -11,7 +12,8 @@ interface ThemedButtonProps {
 const ThemedButton: React.FC<ThemedButtonProps> = ({ 
     customNativeWind = "", 
     icon = "", 
-    textColor = "black", 
+    textColor = "black",
+    buttonColor = "black", 
     text, 
     trigger,
     ...props }) => {
@@ -23,6 +25,7 @@ const ThemedButton: React.FC<ThemedButtonProps> = ({
             onPress={trigger} 
             icon={icon || ""} 
             textColor={textColor}
+            theme={{colors: { elevation: { level1: buttonColor }}}}
             {...props}
         >
             {text}

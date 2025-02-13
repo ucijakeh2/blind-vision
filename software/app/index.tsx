@@ -12,8 +12,8 @@ import logo from "@/constants/logo";
 import { AuthContext } from "./_layout";
 
 export default function App() {
-  const router = useRouter()
-  const [authorized, _] = useContext(AuthContext)
+  // const router = useRouter()
+  // const [auth, _] = useContext(AuthContext)
   
   useEffect(() => { 
     // Reset storage every reload
@@ -23,14 +23,22 @@ export default function App() {
     const key = ["demo@gmail.com", "blindvision"].toString();
     const value = JSON.stringify({nickname: "Blind Vision"});
     AsyncStorage.setItem(key, value);
+
+    // Create a quick access user every reload
+    const qKey = ["", ""].toString();
+    const qValue = JSON.stringify({nickname: "Phil Dunphy"});
+    AsyncStorage.setItem(qKey, qValue);
   }, [])
 
-  useEffect(() => {
-    if(authorized) {
-      router.dismiss();
-      router.replace("/(tabs)/home");
-    }
-  }, [authorized])
+  // useEffect(() => {
+  //   console.log("Auth changed:", auth);
+
+  //   if(auth) {
+  //     console.log("Authenticated:", auth)
+  //     router.dismiss();
+  //     router.replace("/(tabs)/home");
+  //   }
+  // }, [auth])
 
 
   return (

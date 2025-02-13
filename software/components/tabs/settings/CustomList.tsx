@@ -3,19 +3,21 @@ import { View, Text, StyleProp, TextStyle } from 'react-native'
 import { RelativePathString, useRouter } from 'expo-router'
 import { Icon, List, Switch } from 'react-native-paper'
 
+import CustomStatusBanner from '../home/CustomStatusBanner'
+
 import LayoutObject from '@/constants/types/LayoutObject'
 import icons from '@/constants/icons'
 
-import CustomStatusBanner from '../home/CustomStatusBanner'
-import { ThemeContext } from '@/app/_layout'
+import { AuthContext, ThemeContext } from '@/app/_layout'
+import { DeviceContext } from '@/app/(tabs)/_layout'
 
 interface CustomListProps {
   layout: LayoutObject[]
 }
 
 const myColorByTheme = (dark: boolean, text: boolean = true) => {
-  if(text) {return dark ? "white" : "black"}
-  else { return dark ? "black" : "white"}
+  if (text) {return dark ? "white" : "black"}
+  else { return dark ? "#222222" : "white"}
 }
 
 const myTitleStyle: (dark: boolean) => StyleProp<TextStyle> = (dark) => { 
@@ -31,9 +33,10 @@ const chooseRightIcon: (
   destination: string | undefined, 
   status: boolean | undefined,
   dark: boolean,
-  setDark: Dispatch<SetStateAction<boolean>>
+  setDark: Dispatch<SetStateAction<boolean>>,
+  connected: boolean
 ) => [string, React.JSX.Element] = 
-(title, destination, status, dark, setDark) => {
+(title, destination, status, dark, setDark, connected) => {
   if (destination !== undefined) {
     return [
       `${title} button`, 
@@ -41,8 +44,8 @@ const chooseRightIcon: (
     ]
   } else if (status !== undefined) {
     return [
-      `${title} ${status ? "connected" : "disconnected"}`,
-      <CustomStatusBanner connected={status}/>
+      `${title} ${connected ? "connected" : "disconnected"}`,
+      <CustomStatusBanner connected={connected}/>
     ]
   } else { 
     return [
@@ -65,7 +68,14 @@ const ListItem: React.FC<{
   setDark: Dispatch<SetStateAction<boolean>>
 }> = ({ obj, dark, setDark }) => {
   const router = useRouter()
-  const [myAccessibilityLabel, rightComponent] = chooseRightIcon(obj.title, obj.destination, obj.status, dark, setDark)
+  const [_, setAuth] = useContext(AuthContext)
+  const [device, setDevice] = useContext(DeviceContext)
+  const [myAccessibilityLabel, rightComponent] = chooseRightIcon(obj.title, 
+                                                                 obj.destination, 
+                                                                 obj.status, 
+                                                                 dark, 
+                                                                 setDark,
+                                                                 (device !== null))
 
   return (
     <List.Item 
@@ -82,8 +92,9 @@ const ListItem: React.FC<{
       onPress={() => { 
         if ( obj.destination !== undefined ) { 
           if ( obj.replace !== undefined ) {
-            router.dismissAll();
-            router.replace(obj.destination as RelativePathString);
+            setAuth(null);
+            setDevice(null);
+            router.navigate("/(auth)/sign-in");
           } else { router.push(obj.destination as RelativePathString) }
         } else if ( obj.status === undefined ) { setDark(!dark) }
       }}

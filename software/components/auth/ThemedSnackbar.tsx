@@ -2,7 +2,7 @@ import { Snackbar } from "react-native-paper"
 
 const ThemedSnackbar: React.FC<{
     visible: boolean,
-    setVisibility: (visibile: boolean) => void,
+    setVisibility: (visible: boolean) => void,
     message: string, 
     isError: boolean
 }> = ({ visible, setVisibility, message, isError }) => {
