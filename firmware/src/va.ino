@@ -1,5 +1,6 @@
 #include "config.h"
 #include "va.h"
+#include "pref.h"
 
 #ifdef VA_PIN_0 // VIBRATOR_PIN defined
 
@@ -7,12 +8,13 @@ double g_va_slope_factor;
 
 void va_init()
 {
-  g_va_slope_factor = 1.0;
+  // pull slope factor from preferences
+  g_va_slope_factor = pref_read_va_slope_factor();
   pinMode(VA_PIN_0, OUTPUT);
   pinMode(VA_PIN_1, OUTPUT);
   analogWrite(VA_PIN_0, 0); // start motor off not moving
   analogWrite(VA_PIN_1, 0); // start motor off not moving
-  LOG("VA: initialization completed");
+  LOG("VA: initialization completed, slope factor: " + String(g_va_slope_factor));
 }
 
 void va_drive(uint8_t a_amount)
@@ -35,11 +37,6 @@ void va_drive(uint8_t a_amount)
   analogWrite(VA_PIN_1, l_drive_amount);
 
   LOG(String("VA: drive amount set to ") + String(l_drive_amount));
-}
-
-void va_slope_factor(double a_slope_factor)
-{
-  g_va_slope_factor = a_slope_factor;
 }
 
 #else // VA_PIN_0 undefined

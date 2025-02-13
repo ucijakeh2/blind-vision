@@ -11,11 +11,13 @@
 
 #define SERVICE_UUID        "22345678-1234-1234-1234-123456789abc"
 #define CHARACTERISTIC_UUID "abcd1234-ab12-cd34-ef56-1234567890ab"
+#define DEVICE_NAME        "GLASSES - BLIND VISION"
 
 #else
 
 #define SERVICE_UUID        "12345678-1234-1234-1234-123456789abc"
 #define CHARACTERISTIC_UUID "abcd1234-ab12-cd34-ef56-1234567890ab"
+#define DEVICE_NAME        "STICK - BLIND VISION"
 
 #endif
 
@@ -62,18 +64,26 @@ class MyCallbacks : public BLECharacteristicCallbacks {
     ///// IN CASE OF PRODUCTION MODE : STICK
     ///////////////////////////
 
-    Serial.print("Received: ");
+    constexpr double MIN_SLOPE_FACTOR = 0.2;
+    constexpr double MAX_SLOPE_FACTOR = 1.0;
+    constexpr double SLOPE_FACTOR_RNG = MAX_SLOPE_FACTOR - MIN_SLOPE_FACTOR;
 
     // extract control byte
     uint8_t l_byte = value[0];
 
-    double l_va_slope_factor = (double)l_byte / (double)255;
+    // due to the fact that the slope factor being 0 makes the product literally useless, we understand 0 to mean (low, but useful still).
+    //     hence the transformation here, making the minimum slope factor nonzero
+    double l_va_slope_factor = (SLOPE_FACTOR_RNG / 1.0) * ((double)l_byte / (double)255) + MIN_SLOPE_FACTOR;
 
+    Serial.print("Received: ");
     Serial.println(l_byte);
     Serial.println("Slope Factor: " + String(l_va_slope_factor));
     
     // configure vibrating actuator slope factor
-    va_slope_factor(l_va_slope_factor);
+    pref_write_va_slope_factor(l_va_slope_factor);
+
+    // reload vibrating actuator (pulling new config)
+    va_init();
 
     #endif
 
@@ -84,7 +94,7 @@ void bl_init() {
   Serial.println("Starting BLE Server...");
 
   // Initialize BLE
-  BLEDevice::init("ESP32_BLE_Server");
+  BLEDevice::init(DEVICE_NAME);
   BLEServer *pServer = BLEDevice::createServer();
   pServer->setCallbacks(new MyServerCallbacks());
 
