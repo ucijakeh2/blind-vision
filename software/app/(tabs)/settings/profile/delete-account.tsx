@@ -7,12 +7,10 @@ import { useContext } from 'react'
 import ThemedButton from '@/components/auth/ThemedButton'
 
 import { AuthContext, ThemeContext } from '@/app/_layout'
-import { DeviceContext } from '../../_layout'
 
 const DeleteAccount = () => {
   const router = useRouter()
   const [dark, _1] = useContext(ThemeContext);
-  const [_2, setDevice] = useContext(DeviceContext);
   const [auth, setAuth] = useContext(AuthContext);
 
   
@@ -45,7 +43,6 @@ const DeleteAccount = () => {
           textColor='red'
           theme={{colors: { outline: "red" }}}
           onPress={async () => {
-            setDevice(null);
             setAuth(null);
             if(auth) { await AsyncStorage.removeItem(auth.key.toString()); }
             router.navigate("/(auth)/sign-in")

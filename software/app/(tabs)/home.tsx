@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SystemBars } from 'react-native-edge-to-edge';
 import BleManager, { Peripheral } from 'react-native-ble-manager';
@@ -43,7 +43,6 @@ const BLEButton: React.FC<{
 }
 
 export default function Home() {
-    const [devices, setDevices] = useState<Peripheral[] | null>(null);
     const [glasses, setGlasses] = useState<Peripheral | null>(null);
     const [stick, setStick] = useState<Peripheral | null>(null);
     const [message, setSnackBarMessage] = useState<string>("");
@@ -55,18 +54,39 @@ export default function Home() {
     const [dark, _1] = useContext(ThemeContext);
     const [auth, _2] = useContext(AuthContext);
 
+    const updatedGlasses = useRef<Peripheral | null>(null);
+    const updatedStick = useRef<Peripheral | null>(null);
+
+
     useEffect(() => {
         ble.requestPermissions();
         ble.enableBLE();
         ble.start();
     }, []);
 
+    useEffect(() => { updatedGlasses.current = glasses }, [glasses])
+    useEffect(() => { updatedStick.current = stick }, [stick])
+
     useEffect(() => {
         // Listen to when ESP32 disconnect
-        const onStopDisconnectListener = BleManager.onDisconnectPeripheral(() => { 
-            setDevices(null);
-            setVisibility(true);
-            setSnackBarMessage("Devices disconnected");
+        const onStopDisconnectListener = BleManager.onDisconnectPeripheral((peripheral: any) => { 
+            const glasses = updatedGlasses.current;
+            const stick = updatedStick.current;
+
+            if (glasses) {
+                if (glasses.id === peripheral.peripheral) {
+                    console.log("Blind Vision Glasses disconnected");
+                    setGlassesConnection(false); return;
+                }
+            }
+
+            if (stick) {
+                console.log(stick.id, peripheral.peripheral)
+                if (stick.id === peripheral.peripheral) {
+                    console.log("Blind Vision Stick disconnected");
+                    setStickConnection(false); return;
+                }
+            }
         })
 
         return () => { onStopDisconnectListener.remove(); }
@@ -79,7 +99,7 @@ export default function Home() {
                 className={styles.tabs.safeAreaViewStyle}
                 style={{backgroundColor: dark ? "#222222" : "white"}}
             >
-                {(devices?.length !== 2) ?
+                {!(glasses || stick) ?
                     <>
                         <ThemedSnackbar
                             message={message}
@@ -100,8 +120,6 @@ export default function Home() {
                                         setVisibility(true);
                                         setSnackBarMessage("Cannot find devices.");
                                     }
-
-                                    setDevices(connectedDevices);
 
                                     const filteredGlasses = connectedDevices?.filter((value) => value.name?.includes("Glasses"))[0]
                                     const filteredStick = connectedDevices?.filter((value) => value.name?.includes("Stick"))[0]

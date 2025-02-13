@@ -25,7 +25,7 @@ const CustomLabel: React.FC<{ text: string, includeBackButton?: boolean }> = ({ 
             )}
             labelStyle={{color: "white"}}
             theme={{ colors: { outline: "white" }}}
-            onPress={() => router.dismiss()}
+            onPress={() => router.dismissTo("/settings")}
           >{"Back"}
           </Button>
         }

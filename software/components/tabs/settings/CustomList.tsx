@@ -95,11 +95,8 @@ const ListItem: React.FC<{
       style={{ borderBottomWidth: 1, borderBottomColor: "#BFBFBF", paddingLeft: 20, paddingVertical: 15 }}
       onPress={() => { 
         if ( obj.destination !== undefined ) { 
-          if ( obj.replace !== undefined ) {
-            setAuth(null);
-            setDevice(null);
-            router.navigate("/(auth)/sign-in");
-          } else { router.push(obj.destination as RelativePathString) }
+          if ( obj.replace !== undefined ) { setAuth(null); router.navigate("/(auth)/sign-in"); } 
+          else { router.push(obj.destination as RelativePathString) }
         } else if ( obj.status === undefined ) { setDark(!dark) }
       }}
     />
