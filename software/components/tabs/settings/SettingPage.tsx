@@ -39,7 +39,7 @@ const SettingPage: React.FC<SettingPageProps> = ({
             includeBackButton={includeBackButton}
         />
         <View className="h-4/5 w-11/12">
-            <CustomList layout={layoutSource}/>
+            <CustomList title={title} layout={layoutSource}/>
         </View> 
     </SafeAreaView>
   )

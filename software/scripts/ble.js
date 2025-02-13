@@ -2,8 +2,9 @@ import { PermissionsAndroid } from "react-native";
 import BleManager, { Peripheral } from "react-native-ble-manager";
 import { Buffer } from "buffer";
 
-const SERVICE_UUID = "12345678-1234-1234-1234-123456789abc";
-const CHARACTERISTIC_UUID = "abcd1234-ab12-cd34-ef56-1234567890ab";
+export const SERVICE_UUID_GLASSES = "12345678-1234-1234-1234-123456789abc";
+export const SERVICE_UUID_STICK = "22345678-1234-1234-1234-123456789abc";
+export const CHARACTERISTIC_UUID = "abcd1234-ab12-cd34-ef56-1234567890ab";
 const DELAY = 5; // in seconds
 
 /**
@@ -30,14 +31,14 @@ async function start() {
 /**
  * Start scanning for the corresponding ESP32 (SERVICE_UUID).
  * Attempt to connect when found.
- * @returns { Peripheral | null }
+ * @returns { Peripheral[] | null }
  */
-async function scanThenConnect() {
+async function scan() {
     console.log('Scanning for ESP32...');
     
     try {
         // Start scanning for ESP32
-        await BleManager.scan([SERVICE_UUID], DELAY, true);
+        await BleManager.scan([SERVICE_UUID_GLASSES, SERVICE_UUID_STICK], DELAY, true);
         console.log('Scan started');
 
         // Wait for the scan to complete
@@ -48,9 +49,10 @@ async function scanThenConnect() {
         console.log('Discovered devices:', foundDevices);
 
         // Must find only 1 peripheral, connect if found
-        if (foundDevices.length === 1) {
-            await _connectToESP32(foundDevices[0].id);
-            return foundDevices[0];
+        if (foundDevices.length > 0) {
+            // await _connectToESP32(foundDevices[0].id);
+            // await _connectToESP32(foundDevices[1].id);
+            return foundDevices;
         }
 
         // Return null otherwise
@@ -67,32 +69,43 @@ async function scanThenConnect() {
  * Helper function that attempts to connect to deviceId,
  * ensure that it matches SERVICE_UUID and CHARACTERISTIC_UUID
  * @param {string} deviceId - The ESP32 ID, found in getDiscoveredPeripherals
+ * @returns {boolean} Connection status
  */
-async function _connectToESP32(deviceId) {
+async function connect(deviceId) {
     try {
-      await BleManager.connect(deviceId);
-      console.log(`Connected to ${deviceId}`);
-  
-      const services = await BleManager.retrieveServices(deviceId);
-      console.log("Services:", services);
-  
-      const characteristic = services.characteristics.find(char => 
+        await BleManager.connect(deviceId);
+        console.log(`Connected to ${deviceId}`);
+
+        const services = await BleManager.retrieveServices(deviceId);
+        console.log("Services:", services);
+
+        const characteristic = services.characteristics.find(char => 
         char.characteristic === CHARACTERISTIC_UUID
-      );
-  
-      if (characteristic) { console.log("Found characteristic:", characteristic); } 
-      else { console.log("Characteristic not found"); }
-    } catch (error) { console.error("Connection error:", error); }
+        );
+
+        if (characteristic) { console.log("Found characteristic:", characteristic); } 
+        else { console.log("Characteristic not found"); }
+        
+        return true;
+    } 
+
+    catch (error) { 
+        console.error("Connection error:", error); 
+        return false;
+    }
 }
 
 /**
  * Read data from the ESP32 over BLE
  * @param {string} deviceId - The ESP32 ID, found in getDiscoveredPeripherals
+ * @param {string} serviceUUID - The ESP32 service UUID
  * @param {boolean} [convertToString=false] - Convert the data to string before returning
- * @returns {Array<number> | string} Default to array of bytes, unless convertToString is set to true
+ * @returns {number[] | string} Default to array of bytes, unless convertToString is set to true
  */
-async function read(deviceId, convertToString = false) {
-    const data = await BleManager.read(deviceId, SERVICE_UUID, CHARACTERISTIC_UUID);
+async function read(deviceId, serviceUUID, convertToString = false) {
+    console.log(serviceUUID)
+
+    const data = await BleManager.read(deviceId, serviceUUID, CHARACTERISTIC_UUID);
     console.log("Raw data from ESP32:", data);
     if(!convertToString) { return data; }
 
@@ -105,14 +118,18 @@ async function read(deviceId, convertToString = false) {
 /**
  * Write data to the ESP32 over BLE
  * @param {string} deviceId - The ESP32 ID, found in getDiscoveredPeripherals
- * @param {Array<number>} byteArray - The array of bytes to write to ESP32
+ * @param {string} serviceUUID - The ESP32 service UUID, found in getDiscoveredPeripherals
+ * @param {number[]} byteArray - The array of bytes to write to ESP32
  */
-async function write(deviceId, byteArray) {
+async function write(deviceId, serviceUUID, byteArray) {
     console.log("Writing to ESP32: " + byteArray)
     const buffer = Buffer.from(byteArray)
-    await BleManager.write(deviceId, SERVICE_UUID, CHARACTERISTIC_UUID, buffer.toJSON().data)
+    await BleManager.write(deviceId, serviceUUID, CHARACTERISTIC_UUID, buffer.toJSON().data)
 }
-
+/**
+ * Ask user to enable bluetooth
+ * @returns {boolean} Allow or deny
+ */
 async function enableBLE() {
     try {
         await BleManager.enableBluetooth();
@@ -123,7 +140,8 @@ async function enableBLE() {
 export default {
     requestPermissions,
     start,
-    scanThenConnect,
+    scan,
+    connect,
     read,
     write,
     enableBLE

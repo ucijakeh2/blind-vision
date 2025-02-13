@@ -8,10 +8,11 @@ import CustomStatusBanner from '../home/CustomStatusBanner'
 import LayoutObject from '@/constants/types/LayoutObject'
 import icons from '@/constants/icons'
 
+import { GlassesConnectionContext, StickConnectionContext } from '@/app/(tabs)/_layout'
 import { AuthContext, ThemeContext } from '@/app/_layout'
-import { DeviceContext } from '@/app/(tabs)/_layout'
 
 interface CustomListProps {
+  title: string,
   layout: LayoutObject[]
 }
 
@@ -63,19 +64,22 @@ const RightArrow = () => {
 }
 
 const ListItem: React.FC<{ 
+  title: string,
   obj: LayoutObject, 
   dark: boolean,
   setDark: Dispatch<SetStateAction<boolean>>
-}> = ({ obj, dark, setDark }) => {
+}> = ({ title, obj, dark, setDark }) => {
   const router = useRouter()
   const [_, setAuth] = useContext(AuthContext)
-  const [device, setDevice] = useContext(DeviceContext)
+  const [isGlassesConnected, _1] = useContext(GlassesConnectionContext)
+  const [isStickConnected, _2] = useContext(StickConnectionContext)
+  const connected = (title === "Glasses") ? isGlassesConnected : isStickConnected   
   const [myAccessibilityLabel, rightComponent] = chooseRightIcon(obj.title, 
                                                                  obj.destination, 
                                                                  obj.status, 
                                                                  dark, 
                                                                  setDark,
-                                                                 (device !== null))
+                                                                 connected)
 
   return (
     <List.Item 
@@ -141,14 +145,14 @@ const ListAccordion: React.FC<{ obj: LayoutObject, dark: boolean }> = ({ obj, da
   )
 }
 
-const CustomList: React.FC<CustomListProps> = ({ layout }) => {
+const CustomList: React.FC<CustomListProps> = ({ title, layout }) => {
   const [dark, setDark] = useContext(ThemeContext)
 
   return (
     <List.Section>
       {layout.map((obj, index) => {
         if (obj.dropdown !== undefined) { return <ListAccordion key={index} obj={obj} dark={dark}/> } 
-        else { return <ListItem key={index} obj={obj} dark={dark} setDark={setDark}/>}
+        else { return <ListItem key={index} title={title} obj={obj} dark={dark} setDark={setDark}/>}
       })}
     </List.Section>
   )

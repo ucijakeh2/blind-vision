@@ -13,10 +13,10 @@ import backgrounds from "@/constants/backgrounds";
 import images from "@/constants/images";
 import styles from "@/constants/styles";
 
-import ble from "@/scripts/ble";
+import ble, { SERVICE_UUID_GLASSES, SERVICE_UUID_STICK } from "@/scripts/ble";
 
 import { AuthContext, ThemeContext } from '../_layout';
-import { DeviceContext } from './_layout';
+import { GlassesConnectionContext, StickConnectionContext } from "./_layout";
 
 const BLEButton: React.FC<{
     isLoading: boolean,
@@ -43,13 +43,17 @@ const BLEButton: React.FC<{
 }
 
 export default function Home() {
+    const [devices, setDevices] = useState<Peripheral[] | null>(null);
+    const [glasses, setGlasses] = useState<Peripheral | null>(null);
+    const [stick, setStick] = useState<Peripheral | null>(null);
+    const [message, setSnackBarMessage] = useState<string>("");
     const [isScanning, setScanning] = useState<boolean>(false);
     const [visible, setVisibility] = useState<boolean>(false);
-    const [message, setSnackBarMessage] = useState<string>("");
 
+    const [isGlassesConnected, setGlassesConnection] = useContext(GlassesConnectionContext);
+    const [isStickConnected, setStickConnection] = useContext(StickConnectionContext);
     const [dark, _1] = useContext(ThemeContext);
     const [auth, _2] = useContext(AuthContext);
-    const [device, setDevice] = useContext(DeviceContext);
 
     useEffect(() => {
         ble.requestPermissions();
@@ -60,7 +64,7 @@ export default function Home() {
     useEffect(() => {
         // Listen to when ESP32 disconnect
         const onStopDisconnectListener = BleManager.onDisconnectPeripheral(() => { 
-            setDevice(null);
+            setDevices(null);
             setVisibility(true);
             setSnackBarMessage("Devices disconnected");
         })
@@ -75,7 +79,7 @@ export default function Home() {
                 className={styles.tabs.safeAreaViewStyle}
                 style={{backgroundColor: dark ? "#222222" : "white"}}
             >
-                {!device ?
+                {(devices?.length !== 2) ?
                     <>
                         <ThemedSnackbar
                             message={message}
@@ -89,15 +93,23 @@ export default function Home() {
                                 // Ask for it otherwise
                                 if(await ble.enableBLE()) {
                                     setScanning(true)
-                                    const connectedDevice: Peripheral | null = await ble.scanThenConnect();
-                                    console.log("Returned connected device: " + connectedDevice);
+                                    const connectedDevices: Peripheral[] | null = await ble.scan();
+                                    console.log("Returned connected device: ", connectedDevices);
 
-                                    if (!connectedDevice) {
+                                    if (!connectedDevices) {
                                         setVisibility(true);
                                         setSnackBarMessage("Cannot find devices.");
                                     }
 
-                                    setDevice(connectedDevice);
+                                    setDevices(connectedDevices);
+
+                                    const filteredGlasses = connectedDevices?.filter((value) => value.name?.includes("Glasses"))[0]
+                                    const filteredStick = connectedDevices?.filter((value) => value.name?.includes("Stick"))[0]
+                                    console.log(filteredGlasses, filteredStick)
+                                    
+                                    if (filteredGlasses) setGlasses(filteredGlasses);
+                                    if (filteredStick) setStick(filteredStick);
+
                                     setScanning(false);
                                 }
                             }} 
@@ -115,18 +127,22 @@ export default function Home() {
                             deviceName="Glasses"
                             sliderName="Glasses volume"
                             destination="/settings/glasses"
-                            connected={device !== null}
+                            connected={isGlassesConnected}
+                            setConnection={setGlassesConnection}
                             imageSource={images.glasses}
-                            bleId={device.id}
+                            bleId={glasses ? glasses.id : ""}
+                            serviceUUID={SERVICE_UUID_GLASSES}
                         />
                         <CustomDeviceCard
                             index={1}
                             deviceName="Stick"
                             sliderName="Blind stick vibration"
                             destination="/settings/stick"
-                            connected={device !== null}
+                            connected={isStickConnected}
+                            setConnection={setStickConnection}
                             imageSource={images.blindStick}
-                            bleId={device.id}
+                            bleId={stick ? stick.id : ""}
+                            serviceUUID={SERVICE_UUID_STICK}
                         /> 
                     </>
                 }

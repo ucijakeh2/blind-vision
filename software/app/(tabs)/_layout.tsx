@@ -1,5 +1,4 @@
 import { createContext, Dispatch, SetStateAction, useContext, useState } from "react";
-import { Peripheral } from "react-native-ble-manager";
 import { Image, View } from "react-native";
 import { Tabs } from "expo-router";
 
@@ -7,8 +6,9 @@ import icons from "@/constants/icons";
 
 import { ThemeContext } from "../_layout";
 
-type PeripheralContextType = [Peripheral | null, Dispatch<SetStateAction<Peripheral | null>>]
-export const DeviceContext = createContext<PeripheralContextType>([null, () => {}])
+type ConnectionContextType = [boolean, Dispatch<SetStateAction<boolean>>]
+export const GlassesConnectionContext = createContext<ConnectionContextType>([false, () => {}])
+export const StickConnectionContext = createContext<ConnectionContextType>([false, () => {}])
 
 const TabIcon = ({ icon, color, name, focused }) => {
     return (
@@ -25,7 +25,8 @@ const TabIcon = ({ icon, color, name, focused }) => {
 
 export default function TabsLayout() {
     const [dark, _] = useContext(ThemeContext)
-    const [device, setDevice] = useState<Peripheral | null>(null);
+    const [isGlassesConnected, setGlassesConnection] = useState<boolean>(false);
+    const [isStickConnected, setStickConnection] = useState<boolean>(false);
 
     const darkTheme = (dark: boolean) => {
         if (dark) {
@@ -44,7 +45,8 @@ export default function TabsLayout() {
     }
 
     return (
-        <DeviceContext.Provider value={[device, setDevice]}>
+        <GlassesConnectionContext.Provider value={[isGlassesConnected, setGlassesConnection]}>
+        <StickConnectionContext.Provider value={[isStickConnected, setStickConnection]}>
             <Tabs
                 screenOptions={{
                     headerShown: false,
@@ -105,6 +107,7 @@ export default function TabsLayout() {
                     }}
                 />
             </Tabs>
-        </DeviceContext.Provider>
+        </StickConnectionContext.Provider>
+        </GlassesConnectionContext.Provider>
     )
 }

@@ -93,7 +93,7 @@ const stick = [
     {
         title: "Status",
         imageSource: status,
-        status: false
+        status: true
     },
     {
         title: "Vibration",
