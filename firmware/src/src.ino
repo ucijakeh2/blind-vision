@@ -145,23 +145,6 @@ int g_co_x;
 int g_co_y;
 int g_co_z;
 
-#define MAX_SP_PULSE_PERIOD 1000000
-#define MIN_SP_PULSE_PERIOD  250000
-
-bool print_measurements(void*)
-{
-  // print measured compass values
-  // Serial.print("X: ");
-  // Serial.print(g_co_x);
-  // Serial.print(" Y: ");
-  // Serial.print(g_co_y);
-  // Serial.print(" Z: ");
-  // Serial.print(g_co_z);
-  // Serial.print(", US: ");
-  // Serial.println(g_us_useful_measurement);
-  return true;
-}
-
 bool update_us_data_and_beep(void*)
 {
   constexpr uint32_t MAX_BEEP_PERIOD_us = 1000000;
@@ -177,7 +160,7 @@ bool update_us_data_and_beep(void*)
   // max 255, min 0
   uint8_t l_us_useful_measurement = us_read_useful();
 
-  Serial.println(l_us_useful_measurement);
+  // Serial.println(l_us_useful_measurement);
 
   // cutoff test
   if (l_us_useful_measurement == 0)
@@ -205,7 +188,7 @@ bool update_us_data_and_beep(void*)
     * CONVERSION_FACTOR                     // CONVERSION RATIO
     + (double)MIN_BEEP_PERIOD_us;           // OFFSET
 
-  Serial.println(l_period_us);
+  // Serial.println(l_period_us);
 
   g_us_timer.in(l_period_us, update_us_data_and_beep);
   
@@ -215,6 +198,13 @@ bool update_us_data_and_beep(void*)
 bool update_co_data(void*)
 {
   co_read(&g_co_x, &g_co_y, &g_co_z);
+  Serial.print("X: ");
+  Serial.print(g_co_x);
+  Serial.print(" Y: ");
+  Serial.print(g_co_y);
+  Serial.print(" Z: ");
+  Serial.print(g_co_z);
+  Serial.println(" Theta: " + String(atan2(g_co_y, g_co_x)));
   return true;
 }
 
@@ -229,7 +219,7 @@ void setup() {
   sp_init();
   sleep(1);
   g_us_timer.in(50000, update_us_data_and_beep);
-  // g_us_timer.every(250000, update_co_data);
+  g_us_timer.every(250000, update_co_data);
   // g_us_timer.every(50000,  print_measurements);
 }
 
