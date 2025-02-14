@@ -59,7 +59,7 @@
 #define US_AN 20
 
 // VIBRATING ACTUATOR PINS
-#define VA_PIN_0 23
+#define VA_PIN_0 22
 #define VA_PIN_1 24
 
 #endif

@@ -19,14 +19,21 @@ void va_init()
 
 void va_drive(uint8_t a_amount)
 {
-  constexpr uint8_t MIN_DRIVE_AMOUNT = 140;
+  constexpr uint8_t MIN_DRIVE_AMOUNT = 100;
   constexpr uint8_t MAX_DRIVE_AMOUNT = 255;
   constexpr uint8_t DRIVE_AMOUNT_RANGE = MAX_DRIVE_AMOUNT - MIN_DRIVE_AMOUNT;
 
   // a_amount = 255;
 
+  Serial.println(a_amount);
+
   if (a_amount == 0) // cutoff, just return
+  {
+    // drive the motors at zero
+    analogWrite(VA_PIN_0, 0);
+    analogWrite(VA_PIN_1, 0);
     return;
+  }
 
   // scale the drive amount
   uint8_t l_drive_amount =

@@ -95,12 +95,12 @@ uint8_t  us_read_useful()
 
   #if GLASSES
 
-  constexpr uint8_t MAX_USEFUL_DISTANCE_IN = 96;
+  constexpr uint8_t MAX_USEFUL_DISTANCE_IN = 60;
   constexpr uint8_t MIN_USEFUL_DISTANCE_IN = 12;
 
   #else
 
-  constexpr uint8_t MAX_USEFUL_DISTANCE_IN = 48;
+  constexpr uint8_t MAX_USEFUL_DISTANCE_IN = 96;
   constexpr uint8_t MIN_USEFUL_DISTANCE_IN = 12;
 
   #endif
@@ -112,6 +112,8 @@ uint8_t  us_read_useful()
 
   // read in raw value
   uint16_t l_raw = us_read_scaled();
+
+  // Serial.println("SCALED: " + String(l_raw));
 
   // clip the raw value to being within the useful range
   uint16_t l_capped = min(MAX_USEFUL, max(MIN_USEFUL, l_raw));

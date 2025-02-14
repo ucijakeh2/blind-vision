@@ -165,12 +165,27 @@ bool print_measurements(void*)
 bool update_us_data_and_beep(void*)
 {
   constexpr uint32_t MAX_BEEP_PERIOD_us = 1000000;
-  constexpr uint32_t MIN_BEEP_PERIOD_us = 100000;
+  constexpr uint32_t MIN_BEEP_PERIOD_us = 50000;
   constexpr uint32_t BEEP_PERIOD_RANGE_us = MAX_BEEP_PERIOD_us - MIN_BEEP_PERIOD_us;
   constexpr double   CONVERSION_FACTOR = (double)BEEP_PERIOD_RANGE_us/(double)255;
 
   // static pulse var
   static bool s_pulse = false;
+
+  ////////////////////
+
+  // max 255, min 0
+  uint8_t l_us_useful_measurement = us_read_useful();
+
+  Serial.println(l_us_useful_measurement);
+
+  // cutoff test
+  if (l_us_useful_measurement == 0)
+  {
+    g_us_timer.in(50000, update_us_data_and_beep);
+    sp_drive_amount(0);
+    return true;
+  }
 
   // toggle pulse
   s_pulse = !s_pulse;
@@ -178,16 +193,19 @@ bool update_us_data_and_beep(void*)
   // drive speaker with (tone / no tone)
   sp_drive_amount(s_pulse ? 1 : 0);
 
-  ////////////////////
 
-  // max 255, min 0
-  uint8_t l_us_useful_measurement = us_read_useful();
+  // if (l_us_useful_measurement == 0)
+  //   return 
+
+  constexpr uint8_t TEMP_SAT_MEASUREMENT = 200;
 
   // period computed from ultrasonic useful measurement
   uint32_t l_period_us =
-    (double)(255 - l_us_useful_measurement) // USEFUL COMPLIMENT
+    (double)(TEMP_SAT_MEASUREMENT - min(TEMP_SAT_MEASUREMENT, l_us_useful_measurement)) // USEFUL COMPLIMENT
     * CONVERSION_FACTOR                     // CONVERSION RATIO
     + (double)MIN_BEEP_PERIOD_us;           // OFFSET
+
+  Serial.println(l_period_us);
 
   g_us_timer.in(l_period_us, update_us_data_and_beep);
   
