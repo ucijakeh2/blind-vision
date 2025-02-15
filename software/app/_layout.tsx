@@ -1,7 +1,13 @@
+import { configureReanimatedLogger, ReanimatedLogLevel, } from 'react-native-reanimated';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PaperProvider } from "react-native-paper";
 import { createContext, useState } from "react";
 import { Stack } from "expo-router";
+
+configureReanimatedLogger({
+  level: ReanimatedLogLevel.warn,
+  strict: false,
+});
 
 type ThemeContextType = [boolean, () => void];
 export const ThemeContext = createContext<ThemeContextType>([false, () => {}]);

@@ -121,8 +121,8 @@ export default function Home() {
                                         setSnackBarMessage("Cannot find devices.");
                                     }
 
-                                    const filteredGlasses = connectedDevices?.filter((value) => value.name?.includes("Glasses"))[0]
-                                    const filteredStick = connectedDevices?.filter((value) => value.name?.includes("Stick"))[0]
+                                    const filteredGlasses = connectedDevices?.filter((value) => value.advertising.serviceUUIDs?.[0] === SERVICE_UUID_GLASSES)[0]
+                                    const filteredStick = connectedDevices?.filter((value) => value.advertising.serviceUUIDs?.[0] === SERVICE_UUID_STICK)[0]
                                     console.log(filteredGlasses, filteredStick)
                                     
                                     if (filteredGlasses) setGlasses(filteredGlasses);

@@ -9,7 +9,9 @@ import CustomSlider from './CustomSlider'
 import ble from '@/scripts/ble'
 import { ThemeContext } from '@/app/_layout'
 
+const MAX_VALUE = 255;
 const STEP = 10;
+const UNIT = MAX_VALUE / STEP;
 
 interface CustomDeviceCardProps {
     deviceName: string,
@@ -32,10 +34,22 @@ const CustomDeviceCard: React.FC<CustomDeviceCardProps> = ({
     bleId,
     serviceUUID
 }) => {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(-1);
   const [dark, _] = useContext(ThemeContext);
 
-  useEffect(() => { ble.write(bleId, serviceUUID, [value / STEP]); }, [value])
+  const valueToByte = (value: number) => (Math.round((value / STEP) * UNIT));
+  const byteToValue = (byte: any) => (Math.round(byte / UNIT) * STEP);
+  const handleConnection = async () => { 
+    const bleConnected = await ble.connect(bleId);
+    if (bleConnected) {
+      setConnection(bleConnected); 
+      const configBytes = await ble.read(bleId, serviceUUID);
+      if (configBytes && configBytes.length === 1) { setValue(byteToValue(configBytes[0])); }
+      else { setValue(0); }
+    }
+  }
+
+  useEffect(() => { if (value > 0) ble.write(bleId, serviceUUID, [valueToByte(value)]); }, [value])
 
   const theme = (connected: boolean, dark: boolean) => {
     if (!connected) {
@@ -79,7 +93,7 @@ const CustomDeviceCard: React.FC<CustomDeviceCardProps> = ({
       >
         {connected ?
           <CustomSlider sliderName={sliderName} step={STEP} value={value} setValue={setValue} disabled={false}/>:
-          <><CustomSlider sliderName={sliderName} step={STEP} value={value} setValue={setValue} disabled={true}/></>
+          <><CustomSlider sliderName={sliderName} step={STEP} value={0} setValue={setValue} disabled={true}/></>
         }
         <Image className='absolute -right-4 top-1/4 scale-90' source={imageSource}/>
         <View className='h-full flex-1 flex flex-col items-end justify-between ml-6'>
@@ -90,7 +104,7 @@ const CustomDeviceCard: React.FC<CustomDeviceCardProps> = ({
               mode="outlined"
               textColor={theme(connected, dark).buttonColor}
               theme={{colors: { outline: theme(connected, dark).buttonColor }}}
-              onPress={async () => { if (!connected) setConnection(await ble.connect(bleId)); }}
+              onPress={handleConnection}
               >
                 {connected ? `${deviceName} Settings` : `Connect ${deviceName}`}
             </Button>

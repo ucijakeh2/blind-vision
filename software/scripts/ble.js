@@ -2,8 +2,8 @@ import { PermissionsAndroid } from "react-native";
 import BleManager, { Peripheral } from "react-native-ble-manager";
 import { Buffer } from "buffer";
 
-export const SERVICE_UUID_GLASSES = "12345678-1234-1234-1234-123456789abc";
-export const SERVICE_UUID_STICK = "22345678-1234-1234-1234-123456789abc";
+export const SERVICE_UUID_STICK = "12345678-1234-1234-1234-123456789abc";
+export const SERVICE_UUID_GLASSES = "22345678-1234-1234-1234-123456789abc";
 export const CHARACTERISTIC_UUID = "abcd1234-ab12-cd34-ef56-1234567890ab";
 const DELAY = 5; // in seconds
 
