@@ -1,0 +1,64 @@
+{
+  "expo": {
+    "name": "Blind Vision",
+    "slug": "blind-vision-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/require/icon.png",
+    "scheme": "blind-vision-app",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/require/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.tuthanhhuy2124.blindvisionapp"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/require/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "permissions": [
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.BLUETOOTH",
+        "android.permission.BLUETOOTH_ADMIN",
+        "android.permission.BLUETOOTH_SCAN",
+        "android.permission.BLUETOOTH_CONNECT"
+      ],
+      "package": "com.tuthanhhuy2124.blindvisionapp"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/require/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "react-native-edge-to-edge",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "kotlinVersion": "1.9.24"
+          }
+        }
+      ],
+      "react-native-ble-manager"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "9e3dabc6-274e-41f1-8f89-8124e242bd2c"
+      }
+    }
+  }
+}
