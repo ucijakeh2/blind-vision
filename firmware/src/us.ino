@@ -95,15 +95,24 @@ uint8_t  us_read_useful()
 
   #if GLASSES
 
-  constexpr uint8_t MAX_USEFUL_DISTANCE_IN = 96;
+  // max useful val = 104
+
+  constexpr uint8_t MAX_USEFUL_DISTANCE_IN = 120;
   constexpr uint8_t MIN_USEFUL_DISTANCE_IN = 12;
+  constexpr uint8_t FUDGE_FACTOR_MAX_USEFUL = 215;
+  constexpr uint8_t FUDGE_FACTOR_MIN_USEFUL = 0;
 
   #else
 
-  constexpr uint8_t MAX_USEFUL_DISTANCE_IN = 96;
+  constexpr uint8_t MAX_USEFUL_DISTANCE_IN = 72;
   constexpr uint8_t MIN_USEFUL_DISTANCE_IN = 12;
+  constexpr uint8_t FUDGE_FACTOR_MAX_USEFUL = 255;
+  constexpr uint8_t FUDGE_FACTOR_MIN_USEFUL = 0;
 
   #endif
+
+  // compute the fudge factor range. This is the range of values which the ultrasonic sensor produces in practice
+  constexpr uint8_t FUDGE_FACTOR_RANGE = FUDGE_FACTOR_MAX_USEFUL - FUDGE_FACTOR_MIN_USEFUL;
 
   // there is a 1-1 correspondance between inches and Vcc/512, per US datasheet.
   constexpr uint16_t MAX_USEFUL = MAX_USEFUL_DISTANCE_IN;
@@ -129,6 +138,10 @@ uint8_t  us_read_useful()
 
   // construct the resulting value
   uint8_t l_result = l_ratio * 255;
+
+  // NOTE: due to an unknown reason, saturation of glasses US sensor produces a lower voltage than for the stick.
+
+  l_result = (uint8_t)((double)max(min(l_result, FUDGE_FACTOR_MAX_USEFUL), FUDGE_FACTOR_MIN_USEFUL) * 255.0 / (double)FUDGE_FACTOR_RANGE);
 
   return l_result;
 
