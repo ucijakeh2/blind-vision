@@ -54,10 +54,33 @@ class MyCallbacks : public BLECharacteristicCallbacks {
     Serial.print("Received: ");
     Serial.println(value);
 
+    pref_write_sp_slope_factor(value);
+
     #elif GLASSES
     ///////////////////////////
     ///// IN CASE OF PRODUCTION MODE : GLASSES
     ///////////////////////////
+
+    constexpr double MIN_SLOPE_FACTOR = 0.2;
+    constexpr double MAX_SLOPE_FACTOR = 1.0;
+    constexpr double SLOPE_FACTOR_RNG = MAX_SLOPE_FACTOR - MIN_SLOPE_FACTOR;
+
+    // extract control byte
+    uint8_t l_byte = value[0];
+
+    // due to the fact that the slope factor being 0 makes the product literally useless, we understand 0 to mean (low, but useful still).
+    //     hence the transformation here, making the minimum slope factor nonzero
+    double l_sp_slope_factor = (SLOPE_FACTOR_RNG / 1.0) * ((double)l_byte / (double)255) + MIN_SLOPE_FACTOR;
+
+    Serial.print("Received: ");
+    Serial.println(l_byte);
+    Serial.println("Slope Factor: " + String(l_sp_slope_factor));
+    
+    // configure vibrating actuator slope factor
+    pref_write_sp_slope_factor(l_sp_slope_factor);
+
+    // reload speaker (pulling new config)
+    sp_init();
 
     #else
     ///////////////////////////
@@ -95,6 +118,8 @@ void bl_init() {
 
   // Initialize BLE
   BLEDevice::init(DEVICE_NAME);
+  BLEDevice::setPower(ESP_PWR_LVL_N12);  // Lower BLE power (-14 dBm)
+
   BLEServer *pServer = BLEDevice::createServer();
   pServer->setCallbacks(new MyServerCallbacks());
 

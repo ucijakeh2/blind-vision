@@ -14,7 +14,10 @@
 // bool     s_cutoff    = false;
 // uint32_t s_period_ms = 0;
 
-#define DEFAULT_PERIOD_us 1000
+double g_sp_slope_factor;
+
+// TONE PERIOD
+#define DEFAULT_PERIOD_us 2000//1000
 
 uint32_t s_period;
 
@@ -31,6 +34,8 @@ bool sp_drive(void*)
 
 void sp_init()
 {
+  // pull slope factor from preferences
+  g_sp_slope_factor = pref_read_sp_slope_factor();
   // initialize the pop task
   s_pop_task = nullptr;
   // initialize pins
@@ -64,6 +69,11 @@ void sp_drive_amount(uint8_t a_amount)
 
 }
 
+double sp_slope_factor()
+{
+  return g_sp_slope_factor;
+}
+
 #else // SP_PIN undefined
 
 void sp_init()
@@ -74,6 +84,11 @@ void sp_init()
 void sp_drive_amount(uint8_t)
 {
   // do nothing.
+}
+
+double sp_slope_factor()
+{
+  return 0.0;
 }
 
 #endif

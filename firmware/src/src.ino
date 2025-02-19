@@ -15,14 +15,16 @@ void setup() {
   LOG("TESTING ULTRASONIC");
   LOG("----------------");
   us_init();
+  // va_init();
   sleep(1);
+  // va_drive(255);
 }
 
 void loop() {
   uint8_t l_useful = us_read_useful();
   Serial.println(l_useful);
   // analogWrite(LED_PIN, l_useful);
-  delay(50);
+  delayMicroseconds(500000);
 }
 
 #elif TEST_CO
@@ -32,19 +34,21 @@ void loop() {
 
 bool read_compass_data(void*)
 {
-  int x,y,z;
-  co_read(&x, &y, &z);
-  // print measured values
-  Serial.print("X: ");
-  Serial.print(x);
-  Serial.print(" Y: ");
-  Serial.print(y);
-  Serial.print(" Z: ");
-  Serial.println(z);
+  int l_angle = co_read();
+  // // print measured values
+  // Serial.print("X: ");
+  // Serial.print(x);
+  // Serial.print(" Y: ");
+  // Serial.print(y);
+  // Serial.print(" Z: ");
+  // Serial.print(z);
+
+  // float l_heading = atan2(y, x) * (180.0 / PI);
+  // if (l_heading < 0) l_heading += 360.0;
+
+  Serial.println(" Theta: " + String(l_angle));
   return true;
 }
-
-auto timer = timer_create_default();
 
 void setup() {
   Serial.begin(9600);
@@ -54,11 +58,11 @@ void setup() {
   LOG("----------------");
   co_init();
   sleep(1);
-  timer.every(250, read_compass_data);
+  g_us_timer.every(250000, read_compass_data);
 }
 
 void loop() {
-  timer.tick();
+  g_us_timer.tick();
   delay(1); // default delay to not drain power like crazy
 }
 
@@ -159,13 +163,14 @@ bool update_us_data_and_beep(void*)
 
   // max 255, min 0
   uint8_t l_us_useful_measurement = us_read_useful();
+  // uint8_t l_us_useful_measurement = 255;
 
   // Serial.println(l_us_useful_measurement);
 
   // cutoff test
   if (l_us_useful_measurement == 0)
   {
-    g_us_timer.in(50000, update_us_data_and_beep);
+    g_us_timer.in(500000, update_us_data_and_beep);
     sp_drive_amount(0);
     return true;
   }
@@ -176,19 +181,21 @@ bool update_us_data_and_beep(void*)
   // drive speaker with (tone / no tone)
   sp_drive_amount(s_pulse ? 1 : 0);
 
-
   // if (l_us_useful_measurement == 0)
-  //   return 
+  //   return
 
-  constexpr uint8_t TEMP_SAT_MEASUREMENT = 200;
+  Serial.println(sp_slope_factor());
+
+  Serial.println(l_us_useful_measurement);
 
   // period computed from ultrasonic useful measurement
   uint32_t l_period_us =
-    (double)(TEMP_SAT_MEASUREMENT - min(TEMP_SAT_MEASUREMENT, l_us_useful_measurement)) // USEFUL COMPLIMENT
-    * CONVERSION_FACTOR                     // CONVERSION RATIO
-    + (double)MIN_BEEP_PERIOD_us;           // OFFSET
+    (double)(255 - l_us_useful_measurement) // USEFUL COMPLIMENT
+    * CONVERSION_FACTOR             // CONVERSION RATIO
+    * sp_slope_factor()
+    + (double)MIN_BEEP_PERIOD_us;   // OFFSET
 
-  // Serial.println(l_period_us);
+  Serial.println(l_period_us);
 
   g_us_timer.in(l_period_us, update_us_data_and_beep);
   
@@ -197,14 +204,8 @@ bool update_us_data_and_beep(void*)
 
 bool update_co_data(void*)
 {
-  co_read(&g_co_x, &g_co_y, &g_co_z);
-  Serial.print("X: ");
-  Serial.print(g_co_x);
-  Serial.print(" Y: ");
-  Serial.print(g_co_y);
-  Serial.print(" Z: ");
-  Serial.print(g_co_z);
-  Serial.println(" Theta: " + String(atan2(g_co_y, g_co_x)));
+  int l_angle = co_read();
+  // Serial.println(" Theta: " + String(l_angle));
   return true;
 }
 
@@ -217,8 +218,9 @@ void setup() {
   us_init();
   co_init();
   sp_init();
+  // bl_init();
   sleep(1);
-  g_us_timer.in(50000, update_us_data_and_beep);
+  g_us_timer.in(500000, update_us_data_and_beep);
   g_us_timer.every(250000, update_co_data);
   // g_us_timer.every(50000,  print_measurements);
 }
@@ -251,7 +253,7 @@ void setup() {
   LOG("DEVICE BOOTED UP: STICK");
   LOG("----------------");
   va_init();
-  bl_init();
+  // bl_init();
   sleep(1);
   g_us_timer.every(50000, update_us_measurement_and_va_drive);
 }
