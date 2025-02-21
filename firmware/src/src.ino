@@ -249,13 +249,39 @@ bool update_us_measurement_and_va_drive(void*)
 void setup() {
   Serial.begin(9600);
   sleep(2);
-  LOG("----------------");
-  LOG("DEVICE BOOTED UP: STICK");
-  LOG("----------------");
-  va_init();
-  // bl_init();
-  sleep(1);
-  g_us_timer.every(50000, update_us_measurement_and_va_drive);
+  
+  //////////////////////////////////////////////////
+  //////////// CHECK FOR BL PAIRING MODE ///////////
+  //////////////////////////////////////////////////
+  bool l_bl_pairing_mode = pref_read_bl_pairing_mode();
+
+  //////////////////////////////////////////////////
+  ////////////// TOGGLE BL PAIRING MODE ////////////
+  //////////////////////////////////////////////////
+  pref_write_bl_pairing_mode(!l_bl_pairing_mode);
+
+  if (l_bl_pairing_mode) {
+    //////////////////////////////////////////////////
+    ////////////// BLUETOOTH PAIRING MODE ////////////
+    //////////////////////////////////////////////////
+    LOG("----------------");
+    LOG("DEVICE BOOTED UP: STICK -- BL PAIRING MODE");
+    LOG("----------------");
+    bl_init();
+    sleep(1);
+  }
+  else {
+    //////////////////////////////////////////////////
+    //////////////// NORMAL OPERATIONS ///////////////
+    //////////////////////////////////////////////////
+    LOG("----------------");
+    LOG("DEVICE BOOTED UP: STICK -- NORMAL OPERATIONS");
+    LOG("----------------");
+    va_init();
+    sleep(1);
+    g_us_timer.every(50000, update_us_measurement_and_va_drive);
+  }
+
 }
 
 void loop() {
