@@ -205,7 +205,7 @@ bool update_us_data_and_beep(void*)
 bool update_co_data(void*)
 {
   int l_angle = co_read();
-  // Serial.println(" Theta: " + String(l_angle));
+  Serial.println(" Theta: " + String(l_angle));
   return true;
 }
 
@@ -242,11 +242,12 @@ void setup() {
     LOG("DEVICE BOOTED UP: GLASSES -- NORMAL OPERATIONS");
     LOG("----------------");
     us_init();
-    co_init();
+    // co_init();
     sp_init();
+    // bl_init();
     sleep(1);
     g_us_timer.in(50000, update_us_data_and_beep);
-    g_us_timer.every(250000, update_co_data);
+    // g_us_timer.every(250000, update_co_data);
   }
 
 }
