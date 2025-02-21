@@ -2,6 +2,8 @@
 #define CO_H
 
 void co_init();
-void co_read(int*,int*,int*);
+
+// this function can only be called once every 250ms, returns an angle (0-360)
+int co_read();
 
 #endif

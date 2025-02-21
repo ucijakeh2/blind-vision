@@ -1,5 +1,7 @@
 #include "us.h"
 
+#ifdef US_TX // if us sensor is plugged in
+
 void us_calibrate()
 {
   pinMode(US_TX, OUTPUT);
@@ -93,15 +95,24 @@ uint8_t  us_read_useful()
 
   #if GLASSES
 
+  // max useful val = 104
+
   constexpr uint8_t MAX_USEFUL_DISTANCE_IN = 72;
-  constexpr uint8_t MIN_USEFUL_DISTANCE_IN = 36;
+  constexpr uint8_t MIN_USEFUL_DISTANCE_IN = 12;
+  constexpr uint8_t FUDGE_FACTOR_MAX_USEFUL = 215;
+  constexpr uint8_t FUDGE_FACTOR_MIN_USEFUL = 0;
 
   #else
 
   constexpr uint8_t MAX_USEFUL_DISTANCE_IN = 72;
   constexpr uint8_t MIN_USEFUL_DISTANCE_IN = 12;
+  constexpr uint8_t FUDGE_FACTOR_MAX_USEFUL = 255;
+  constexpr uint8_t FUDGE_FACTOR_MIN_USEFUL = 0;
 
   #endif
+
+  // compute the fudge factor range. This is the range of values which the ultrasonic sensor produces in practice
+  constexpr uint8_t FUDGE_FACTOR_RANGE = FUDGE_FACTOR_MAX_USEFUL - FUDGE_FACTOR_MIN_USEFUL;
 
   // there is a 1-1 correspondance between inches and Vcc/512, per US datasheet.
   constexpr uint16_t MAX_USEFUL = MAX_USEFUL_DISTANCE_IN;
@@ -110,6 +121,8 @@ uint8_t  us_read_useful()
 
   // read in raw value
   uint16_t l_raw = us_read_scaled();
+
+  // Serial.println("SCALED: " + String(l_raw));
 
   // clip the raw value to being within the useful range
   uint16_t l_capped = min(MAX_USEFUL, max(MIN_USEFUL, l_raw));
@@ -126,6 +139,34 @@ uint8_t  us_read_useful()
   // construct the resulting value
   uint8_t l_result = l_ratio * 255;
 
+  Serial.println("test123: "  + String(l_result));
+
+  // NOTE: due to an unknown reason, saturation of glasses US sensor produces a lower voltage than for the stick.
+  l_result = (uint8_t)((double)max(min(l_result, FUDGE_FACTOR_MAX_USEFUL), FUDGE_FACTOR_MIN_USEFUL) * 255.0 / (double)FUDGE_FACTOR_RANGE);
+
+  // Serial.println("Sensor: " + String(l_result));
+
   return l_result;
 
 }
+
+#else // if us sensor is not plugged in
+
+void us_init()
+{
+ // do nothing
+}
+
+uint16_t us_read_scaled()
+{
+ // do nothing
+  return 0;
+}
+
+uint8_t us_read_useful()
+{
+ // do nothing
+  return 0;
+}
+
+#endif
