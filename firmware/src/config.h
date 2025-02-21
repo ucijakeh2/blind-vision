@@ -15,7 +15,7 @@
 #define TEST_VA 0
 #define TEST_SP 0
 #define TEST_BL 0
-#define GLASSES 0
+#define GLASSES 1
 #define DEBUG   1
 
 ///////////////////////////////////////////////////////////

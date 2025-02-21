@@ -170,7 +170,7 @@ bool update_us_data_and_beep(void*)
   // cutoff test
   if (l_us_useful_measurement == 0)
   {
-    g_us_timer.in(500000, update_us_data_and_beep);
+    g_us_timer.in(50000, update_us_data_and_beep);
     sp_drive_amount(0);
     return true;
   }
@@ -211,18 +211,44 @@ bool update_co_data(void*)
 
 void setup() {
   Serial.begin(9600);
-  sleep(2);
-  LOG("----------------");
-  LOG("DEVICE BOOTED UP: GLASSES");
-  LOG("----------------");
-  us_init();
-  co_init();
-  sp_init();
-  // bl_init();
-  sleep(1);
-  g_us_timer.in(500000, update_us_data_and_beep);
-  g_us_timer.every(250000, update_co_data);
-  // g_us_timer.every(50000,  print_measurements);
+  
+  //////////////////////////////////////////////////
+  //////////// CHECK FOR BL PAIRING MODE ///////////
+  //////////////////////////////////////////////////
+  bool l_bl_pairing_mode = pref_read_bl_pairing_mode();
+
+  //////////////////////////////////////////////////
+  ////////////// TOGGLE BL PAIRING MODE ////////////
+  //////////////////////////////////////////////////
+  pref_write_bl_pairing_mode(!l_bl_pairing_mode);
+
+  if (l_bl_pairing_mode) {
+    //////////////////////////////////////////////////
+    ////////////// BLUETOOTH PAIRING MODE ////////////
+    //////////////////////////////////////////////////
+    sleep(2);
+    LOG("----------------");
+    LOG("DEVICE BOOTED UP: GLASSES -- BL PAIRING MODE");
+    LOG("----------------");
+    bl_init();
+    sleep(1);
+  }
+  else {
+    //////////////////////////////////////////////////
+    //////////////// NORMAL OPERATIONS ///////////////
+    //////////////////////////////////////////////////
+    sleep(2);
+    LOG("----------------");
+    LOG("DEVICE BOOTED UP: GLASSES -- NORMAL OPERATIONS");
+    LOG("----------------");
+    us_init();
+    co_init();
+    sp_init();
+    sleep(1);
+    g_us_timer.in(50000, update_us_data_and_beep);
+    g_us_timer.every(250000, update_co_data);
+  }
+
 }
 
 void loop() {

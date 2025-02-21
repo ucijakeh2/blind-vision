@@ -70,7 +70,7 @@ class MyCallbacks : public BLECharacteristicCallbacks {
 
     // due to the fact that the slope factor being 0 makes the product literally useless, we understand 0 to mean (low, but useful still).
     //     hence the transformation here, making the minimum slope factor nonzero
-    double l_sp_slope_factor = (SLOPE_FACTOR_RNG / 1.0) * ((double)l_byte / (double)255) + MIN_SLOPE_FACTOR;
+    double l_sp_slope_factor = (SLOPE_FACTOR_RNG / 1.0) * ((double)(255 - l_byte) / (double)255) + MIN_SLOPE_FACTOR;
 
     Serial.print("Received: ");
     Serial.println(l_byte);
