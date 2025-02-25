@@ -36,21 +36,29 @@ const chooseRightIcon: (
   dark: boolean,
   setDark: Dispatch<SetStateAction<boolean>>,
   connected: boolean
-) => [string, React.JSX.Element] = 
+) => [string, string, React.JSX.Element] = 
 (title, destination, status, dark, setDark, connected) => {
   if (destination !== undefined) {
+    let accessibilityHint = `Double tap to navigate to ${title} page`
+    if (title.toLowerCase() === "log out" || title.toLowerCase() === "delete account") { 
+      accessibilityHint = `Double tap to ${title}`
+    }
+
     return [
+      accessibilityHint,
       `${title} button`, 
       <RightArrow/>
     ]
   } else if (status !== undefined) {
     return [
+      ``,
       `${title} ${connected ? "connected" : "disconnected"}`,
       <CustomStatusBanner connected={connected}/>
     ]
   } else { 
     return [
-      `${title} switch, ${dark ? "enabled" : "disabled"}`, 
+      `Double tap to toggle dark mode`,
+      `${title} switch`, 
       <Switch value={dark} onValueChange={setDark} color="lightgreen"/>
     ]}
 }
@@ -74,12 +82,14 @@ const ListItem: React.FC<{
   const [isGlassesConnected, _1] = useContext(GlassesConnectionContext)
   const [isStickConnected, _2] = useContext(StickConnectionContext)
   const connected = (title === "Glasses") ? isGlassesConnected : isStickConnected   
-  const [myAccessibilityLabel, rightComponent] = chooseRightIcon(obj.title, 
-                                                                 obj.destination, 
-                                                                 obj.status, 
-                                                                 dark, 
-                                                                 setDark,
-                                                                 connected)
+  const [myAccessibilityHint, 
+         myAccessibilityLabel,
+         rightComponent] = chooseRightIcon(obj.title, 
+                                           obj.destination, 
+                                           obj.status, 
+                                           dark, 
+                                           setDark,
+                                           connected)
 
   return (
     <List.Item 
@@ -91,7 +101,6 @@ const ListItem: React.FC<{
         </View>
       )}
       right={() => rightComponent}
-      accessibilityLabel={myAccessibilityLabel}
       style={{ borderBottomWidth: 1, borderBottomColor: "#BFBFBF", paddingLeft: 20, paddingVertical: 15 }}
       onPress={() => { 
         if ( obj.destination !== undefined ) { 
@@ -99,6 +108,10 @@ const ListItem: React.FC<{
           else { router.push(obj.destination as RelativePathString) }
         } else if ( obj.status === undefined ) { setDark(!dark) }
       }}
+
+      focusable={false}
+      accessibilityLabel={myAccessibilityLabel}
+      accessibilityHint={myAccessibilityHint}
     />
   )
 }
@@ -121,21 +134,22 @@ const ListAccordion: React.FC<{ obj: LayoutObject, dark: boolean }> = ({ obj, da
           />
         </View>
       )}
-      accessibilityLabel={`${obj.title} dropdown, ${obj.dropdown[choice]} selected`}
       style={{ backgroundColor: myColorByTheme(dark, false) }}
       expanded={isExpanded}
       onPress={() => setExpansion(!isExpanded)}
+
+      accessibilityLabel={`${obj.title} dropdown, ${obj.dropdown[choice]} selected`}
       >
       {obj.dropdown.map((item, index) => 
         <List.Item 
-          accessibilityLabel={`${item} ${(choice === index) ? "selected" : ""}`}
+        accessibilityLabel={`${item} ${(choice === index) ? "selected" : ""}`}
         
-          key={index} 
-          title={item} 
-          titleStyle={{ color: myColorByTheme(dark) }}
-          right={() => <>{(choice === index) && <Icon source="check" color={myColorByTheme(dark)} size={20}/>}</>}
-          style={{ width: "80%", marginHorizontal: "auto" }}
-          onPress={() => setChoice(index)}
+        key={index} 
+        title={item} 
+        titleStyle={{ color: myColorByTheme(dark) }}
+        right={() => <>{(choice === index) && <Icon source="check" color={myColorByTheme(dark)} size={20}/>}</>}
+        style={{ width: "80%", marginHorizontal: "auto" }}
+        onPress={() => setChoice(index)}
         />
       )}
     </List.Accordion>

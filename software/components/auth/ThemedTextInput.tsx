@@ -29,8 +29,13 @@ const ThemedTextInput: React.FC<ThemedTextInputProps> = ({ style = "", outlineCo
                 <TextInput.Icon 
                     icon={visible ? "eye" : "eye-off"}
                     onPress={() => {setVisibility(!visible)}}
+
+                    accessibilityLabel={"Hide password"}
+                    accessibilityHint={visible ? "on" : "off"}
                 />
             }
+
+            accessibilityLabel={label}
         />
     )
 }

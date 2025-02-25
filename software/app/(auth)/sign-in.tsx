@@ -92,12 +92,14 @@ export default function SignIn() {
                                         trigger={() => {}}
                                     />
                                 </View>
-                                <Text className="mx-auto">
-                                    Don't have an account?{" "}
-                                    <Link style={styleSheet.link} href={"/(auth)/sign-up"}>
-                                        Create an account
-                                    </Link>
-                                </Text>
+                                <View accessible>
+                                    <Text className="mx-auto">
+                                        Don't have an account?{" "}
+                                        <Link style={styleSheet.link} href={"/(auth)/sign-up"}>
+                                            Create an account
+                                        </Link>
+                                    </Text>
+                                </View>
                             </View>
                         </View>
                         <ThemedSnackbar
