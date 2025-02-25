@@ -24,7 +24,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/github_username/repo_name">
+  <a href="https://github.com/ucijakeh2/blind-vision">
     <img src="images/logo.png" alt="Logo" width="140" height="80">
   </a>
 
@@ -177,7 +177,7 @@ Distributed under the project_license. See `LICENSE.txt` for more information.
   
 * Software:
   * Thanh Huy Tu - [LinkedIn](https://www.linkedin.com/in/thanhhuytu/) - tuthanhhuy2004@gmail.com
-  * Junchi Zhang - [LinkedIn]() - email@email_client.com
+  * Junchi Zhang - [LinkedIn]() - junchiz4@uci.edu
 
 Project Link: [https://github.com/ucijakeh2/blind-vision](https://github.com/ucijakeh2/blind-vision)
 
