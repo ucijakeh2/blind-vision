@@ -173,7 +173,7 @@ Distributed under the project_license. See `LICENSE.txt` for more information.
   * Ethan Reynaga - ehreynag@proton.me
     
 * Firmware:
-  * Jake Harrison - <a href="www.linkedin.com/in/jake-harrison-0709b1218" target="_blank">LinkedIn</a> - jakeharrison505@gmail.com
+  * Jake Harrison - <a href="https://www.linkedin.com/in/jake-harrison-0709b1218" target="_blank">LinkedIn</a> - jakeharrison505@gmail.com
   
 * Software:
   * Thanh Huy Tu - <a href="https://www.linkedin.com/in/thanhhuytu/" target="_blank">LinkedIn</a> - tuthanhhuy2004@gmail.com
