@@ -98,7 +98,7 @@ uint8_t  us_read_useful()
   // max useful val = 104
 
   constexpr uint8_t MAX_USEFUL_DISTANCE_IN = 72;
-  constexpr uint8_t MIN_USEFUL_DISTANCE_IN = 12;
+  constexpr uint8_t MIN_USEFUL_DISTANCE_IN = 36;
   constexpr uint8_t FUDGE_FACTOR_MAX_USEFUL = 215;
   constexpr uint8_t FUDGE_FACTOR_MIN_USEFUL = 0;
 
