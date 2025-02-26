@@ -173,10 +173,10 @@ Distributed under the project_license. See `LICENSE.txt` for more information.
   * Ethan Reynaga - ehreynag@proton.me
     
 * Firmware:
-  * Jake Harrison - [LinkedIn](www.linkedin.com/in/jake-harrison-0709b1218){:target="_blank"} - jakeharrison505@gmail.com
+  * Jake Harrison - <a href="www.linkedin.com/in/jake-harrison-0709b1218" target="_blank">LinkedIn</a> - jakeharrison505@gmail.com
   
 * Software:
-  * Thanh Huy Tu - [LinkedIn](https://www.linkedin.com/in/thanhhuytu/){:target="_blank"} - tuthanhhuy2004@gmail.com
+  * Thanh Huy Tu - <a href="https://www.linkedin.com/in/thanhhuytu/" target="_blank">LinkedIn</a> - tuthanhhuy2004@gmail.com
   * Junchi Zhang - junchiz4@uci.edu
 
 Project Link: [https://github.com/ucijakeh2/blind-vision](https://github.com/ucijakeh2/blind-vision)
