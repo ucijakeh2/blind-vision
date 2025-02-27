@@ -5,7 +5,10 @@ Below are notable photos from the hardware development process
 
 ## Finished Products
 <div align="center">
-   <img src="./assets/gallery/welcome.jpg" width=200>
+   <img src="./image/finished/glasses/left.jpg" height=200>
+   <img src="./image/finished/glasses/right.jpg" height=200>
+   <img src="./image/finished/stick/left.jpg" height=200>
+   <img src="./image/finished/stick/right.jpg" height=200>
 </div>
 
 
