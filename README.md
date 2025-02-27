@@ -149,7 +149,6 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 * [Hardware](https://github.com/ucijakeh2/blind-vision/blob/main/hardware/README.md)
 * [Firmware](https://github.com/ucijakeh2/blind-vision/blob/main/firmware/README.md)
 * [Software](https://github.com/ucijakeh2/blind-vision/blob/main/software/README.md)
-  * Figma: [Blind Vision UI Design](https://www.figma.com/proto/bcqtnWh1L766dvBaiZgoI0/Blind-Vision)
  
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
