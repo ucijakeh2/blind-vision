@@ -145,6 +145,11 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 
 
+<!-- Products Demonstration -->
+## Products Demonstration
+
+Here is a video demonstrating how our products work: [Blind Vision Demonstration]()
+
 <!-- ACCOMPLISHMENTS -->
 ## Accomplishments
 
@@ -196,14 +201,20 @@ Distributed under the project_license. See `LICENSE.txt` for more information.
 ## Contact
 
 * Hardware:
-  * Ethan Reynaga - ehreynag@proton.me
+  * Ethan Reynaga: ehreynag@proton.me
     
 * Firmware:
-  * Jake Harrison - [LinkedIn](https://www.linkedin.com/in/jake-harrison-0709b1218) - jakeharrison505@gmail.com
+  * Jake Harrison: jakeharrison505@gmail.com
+    
+    * [![LinkedIn][Linked-In]](https://www.linkedin.com/in/jake-harrison-0709b1218)
+    * [![GitHub][Git-Hub]](https://github.com/ucijakeh2)
   
 * Software:
-  * Thanh Huy Tu - [LinkedIn](https://www.linkedin.com/in/thanhhuytu/) - tuthanhhuy2004@gmail.com
-  * Junchi Zhang - junchiz4@uci.edu
+  * Thanh Huy Tu: tuthanhhuy2004@gmail.com
+    * [![LinkedIn][Linked-In]](https://www.linkedin.com/in/thanhhuytu)
+    * [![GitHub][Git-Hub]](https://github.com/TuThanhHuy2124)
+      
+  * Junchi Zhang: junchiz4@uci.edu
 
 Project Link: [https://github.com/ucijakeh2/blind-vision](https://github.com/ucijakeh2/blind-vision)
 
@@ -222,3 +233,5 @@ Project Link: [https://github.com/ucijakeh2/blind-vision](https://github.com/uci
 [Java-Script-url]: https://www.javascript.com/
 [C-plus-plus]: https://img.shields.io/badge/C++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white
 [C-plus-plus-url]: https://cplusplus.com/
+[Linked-In]: https://custom-icon-badges.demolab.com/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin-white&logoColor=fff
+[Git-Hub]: https://img.shields.io/badge/GitHub-%23121011.svg?style=for-the-badge&logo=github&logoColor=white
