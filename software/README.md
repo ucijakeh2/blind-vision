@@ -27,6 +27,7 @@
 <div align="center">
    <img src="./assets/gallery/settings.jpg" width=300>
    <img src="./assets/gallery/profile.jpg" width=300>
+   <br/>
    <img src="./assets/gallery/glasses.jpg" width=300>
    <img src="./assets/gallery/stick.jpg" width=300>
 </div>
