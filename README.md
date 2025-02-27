@@ -145,13 +145,39 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 
 
-<!-- ROADMAP -->
-## Roadmap
+<!-- ACCOMPLISHMENTS -->
+## Accomplishments
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+* Hardware:
+  - [x] Glasses: Equipped with sensors, speakers, compass, and ESP32.
+  - [x] Blind Stick: Integrated with sensors, actuators, and ESP32.
+        
+* Firmware:
+  - [x] Reads distance from ultrasonic sensors, direction from a digital compass, and controls speakers/actuators.
+        
+* Software:
+  - [x] An Android app that connects to and controls glasses and blind stick via BLE, providing directions using Google Maps API.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- POTENTIAL IMPROVEMENTS -->
+## Potential Improvements
+
+Here are a couple of things we plan to do to improve our products if we have more time and a higher budget:
+
+* Hardware:
+  - [ ] Glasses: Include a digital potentiometer to control speakers' volume.
+  - [ ] Blind Stick: Use a LiDAR sensor instead of an ultrasonic sensor for better range.
+  - [ ] Debug BLE interference with ultrasonic sensors.
+        
+* Firmware:
+  - [ ] Enable BLE connection at all times.
+        
+* Software:
+  - [ ] Build a back-end server with a database.
+  - [ ] Integrate secure authentication methods.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
