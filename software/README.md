@@ -1,6 +1,6 @@
 # Software Gallery
-Below are some screenshots from the Android app
-
+* Figma: [Blind Vision UI Design](https://www.figma.com/proto/bcqtnWh1L766dvBaiZgoI0/Blind-Vision)
+* Below are some screenshots from the Android app
 
 ## Welcome Screen
 <div align="center">
