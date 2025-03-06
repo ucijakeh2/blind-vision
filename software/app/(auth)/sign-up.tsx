@@ -110,12 +110,14 @@ export default function SignIn() {
                                         trigger={() => {}}
                                     />
                                 </View>
-                                <Text className="mx-auto">
-                                    Already have an account?{" "}
-                                    <Link href="/sign-in" style={styleSheet.link} onPress={() => router.dismiss()}>
-                                        Log In
-                                    </Link>
-                                </Text>
+                                <View accessible>
+                                    <Text className="mx-auto">
+                                        Already have an account?{" "}
+                                        <Link href="/sign-in" style={styleSheet.link} onPress={() => router.dismiss()}>
+                                            Log In
+                                        </Link>
+                                    </Text>
+                                </View>
                             </View>
                         </View>
                         <ThemedSnackbar

@@ -4,14 +4,8 @@
 #include <BLE2902.h>
 
 // BLE Service and Characteristic UUIDs
-#define SERVICE_UUID        "12345678-1234-1234-1234-123456789abc"
+#define SERVICE_UUID        "22345678-1234-1234-1234-123456789abc"
 #define CHARACTERISTIC_UUID "abcd1234-ab12-cd34-ef56-1234567890ab"
-
-#define TX_PIN 17
-#define RX_PIN 16
-#define BAUD_RATE 115200
-
-HardwareSerial mySerial(1);
 
 BLECharacteristic *pCharacteristic;
 bool deviceConnected = false;
@@ -26,7 +20,7 @@ class MyServerCallbacks : public BLEServerCallbacks {
     Serial.println("Device connected!");
 
     // Example byte array (you can modify this as needed)
-    uint8_t byteArray[] = {0xE6}; // Replace with your desired data
+    uint8_t byteArray[] = {0x1A}; // Replace with your desired data
 
     // Set the byte array as the characteristic value
     pCharacteristic->setValue(byteArray, sizeof(byteArray));
@@ -43,7 +37,7 @@ class MyServerCallbacks : public BLEServerCallbacks {
     }
     Serial.println();
 
-    
+    delay(1000);
   }
 
   void onDisconnect(BLEServer* pServer) {
@@ -57,40 +51,32 @@ class MyServerCallbacks : public BLEServerCallbacks {
 // Callback for reading and writing BLE characteristic
 class MyCallbacks : public BLECharacteristicCallbacks {
   void onWrite(BLECharacteristic *pCharacteristic) {
-    String stringValue = pCharacteristic->getValue();
-    uint8_t numberValue = (uint8_t)stringValue[0]; 
-    mySerial.write(numberValue);
-    // if (value.length() > 0) {
-    //   uint8_t bitmask = (uint8_t)value[0];  // Read first byte as bitmask
-    //   Serial.print("Received bitmask: 0x");
-    //   Serial.println(bitmask, HEX);
+    String value = pCharacteristic->getValue();
 
-    //   // Print individual bits
-    //   Serial.print("Bit pattern: ");
-    //   for (int i = 7; i >= 0; i--) {
-    //     Serial.print((bitmask >> i) & 1);
-    //   }
-    //   Serial.println();
+    if (value.length() > 0) {
+      uint8_t bitmask = (uint8_t)value[0];  // Read first byte as bitmask
+      Serial.print("Received bitmask: 0x");
+      Serial.println(bitmask, HEX);
 
-    //   // Apply bitmask to LEDs
-    //   for (int i = 0; i < 4; i++) {
-    //     digitalWrite(testLedPins[i], (bitmask >> i) & 1);
-    //   }
-    //   digitalWrite(indexLedPin, (uint8_t)value[0]);
-    // }
+      // Print individual bits
+      Serial.print("Bit pattern: ");
+      for (int i = 7; i >= 0; i--) {
+        Serial.print((bitmask >> i) & 1);
+      }
+      Serial.println();
+
+      // Apply bitmask to LEDs
+      for (int i = 0; i < 4; i++) {
+        digitalWrite(testLedPins[i], (bitmask >> i) & 1);
+      }
+      digitalWrite(indexLedPin, (uint8_t)value[0]);
+    }
   }
 };
 
 void setup() {
   Serial.begin(115200);
-  while (!Serial);
-
-  Serial.println("Starting BLE Server..."); 
-  
-
-  // Initialize UART communication
-  mySerial.begin(BAUD_RATE, SERIAL_8N1, RX_PIN, TX_PIN);
-  Serial.println("ESP32 Transmitter Ready.");
+  Serial.println("Starting BLE Server...");
 
   // Initialize LED pins as OUTPUT
   for (int i = 0; i < 4; i++) {
@@ -102,7 +88,7 @@ void setup() {
 
 
   // Initialize BLE
-  BLEDevice::init("Blind Vision Stick");
+  BLEDevice::init("Blind Vision Glasses");
   BLEServer *pServer = BLEDevice::createServer();
   pServer->setCallbacks(new MyServerCallbacks());
 
@@ -131,13 +117,13 @@ void setup() {
   pAdvertising->setMinPreferred(0x12);
   
   BLEDevice::startAdvertising();
-  Serial.println("ESP32 BLE Server is advertising..."); 
+  Serial.println("ESP32 BLE Server is advertising...");
 }
 
 void loop() {
   // Send a notification every 2 seconds if a device is connected
   if (deviceConnected) {
-    std::string message = "Hello from stick";
+    std::string message = "Hello from glasses";
     pCharacteristic->setValue(message.c_str());
     pCharacteristic->notify();
     Serial.println("Sent notification: " + String(message.c_str()));

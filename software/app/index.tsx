@@ -2,18 +2,14 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SystemBars } from "react-native-edge-to-edge";
-import { useContext, useEffect } from "react";
-import { Link, useRouter } from "expo-router";
 import { Button } from "react-native-paper";
 import { Text, Image } from "react-native";
+import { Link } from "expo-router";
+import { useEffect } from "react";
 
 import logo from "@/constants/logo";
 
-import { AuthContext } from "./_layout";
-
 export default function App() {
-  // const router = useRouter()
-  // const [auth, _] = useContext(AuthContext)
   
   useEffect(() => { 
     // Reset storage every reload
@@ -26,20 +22,9 @@ export default function App() {
 
     // Create a quick access user every reload
     const qKey = ["", ""].toString();
-    const qValue = JSON.stringify({nickname: "Phil Dunphy"});
+    const qValue = JSON.stringify({nickname: "Thanh"});
     AsyncStorage.setItem(qKey, qValue);
   }, [])
-
-  // useEffect(() => {
-  //   console.log("Auth changed:", auth);
-
-  //   if(auth) {
-  //     console.log("Authenticated:", auth)
-  //     router.dismiss();
-  //     router.replace("/(tabs)/home");
-  //   }
-  // }, [auth])
-
 
   return (
     <>
@@ -62,11 +47,14 @@ export default function App() {
           className="w-[327px] h-[170px]"
           source={logo.animated}
         />
-        <Link href="/sign-in">
+        <Link href="/sign-in" asChild>
           <Button
             mode="contained"
+            disabled={false}
             labelStyle={{color: "white"}}
             theme={{ colors: { primary: "#2AB2DB" }}}
+
+            accessibilityHint={"navigate to login page"}
           >
               Continue
           </Button>

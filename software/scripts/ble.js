@@ -1,11 +1,11 @@
 import { PermissionsAndroid } from "react-native";
-import BleManager, { Peripheral } from "react-native-ble-manager";
+import BleManager from "react-native-ble-manager";
 import { Buffer } from "buffer";
 
 export const SERVICE_UUID_STICK = "12345678-1234-1234-1234-123456789abc";
 export const SERVICE_UUID_GLASSES = "22345678-1234-1234-1234-123456789abc";
 export const CHARACTERISTIC_UUID = "abcd1234-ab12-cd34-ef56-1234567890ab";
-const DELAY = 5; // in seconds
+const DELAY = 3; // in seconds
 
 /**
  * Request Android BLE Permissions
@@ -30,15 +30,16 @@ async function start() {
 
 /**
  * Start scanning for the corresponding ESP32 (SERVICE_UUID).
- * Attempt to connect when found.
- * @returns { Peripheral[] | null }
+ * Return the device ID if found.
+ * @param { string } serviceUUID - string of Service UUID to be filtered 
+ * @returns { string | null }
  */
-async function scan() {
+async function scan(serviceUUID) {
     console.log('Scanning for ESP32...');
     
     try {
         // Start scanning for ESP32
-        await BleManager.scan([SERVICE_UUID_GLASSES, SERVICE_UUID_STICK], DELAY, true);
+        await BleManager.scan([serviceUUID], DELAY, true);
         console.log('Scan started');
 
         // Wait for the scan to complete
@@ -52,7 +53,7 @@ async function scan() {
         if (foundDevices.length > 0) {
             // await _connectToESP32(foundDevices[0].id);
             // await _connectToESP32(foundDevices[1].id);
-            return foundDevices;
+            return foundDevices.filter((value) => value.advertising.serviceUUIDs[0] === serviceUUID)[0].id;
         }
 
         // Return null otherwise

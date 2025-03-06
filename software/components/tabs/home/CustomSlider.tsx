@@ -34,9 +34,9 @@ const CustomSlider: React.FC<CustomSliderProps> = ({ sliderName, step, value, se
   return (
     <View
       accessible={true}
-      accessibilityLabel={`${sliderName} slider`}
+      accessibilityLabel={sliderName}
       accessibilityRole={"adjustable"}
-      accessibilityHint={"Double tap to lock"}
+      accessibilityHint={disabled? "Disabled": "Double tap to lock"}
       accessibilityValue={{
         now: value,
         min: 0,
