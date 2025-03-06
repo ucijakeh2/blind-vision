@@ -22,7 +22,7 @@ export default function App() {
 
     // Create a quick access user every reload
     const qKey = ["", ""].toString();
-    const qValue = JSON.stringify({nickname: "Phil Dunphy"});
+    const qValue = JSON.stringify({nickname: "Thanh"});
     AsyncStorage.setItem(qKey, qValue);
   }, [])
 
