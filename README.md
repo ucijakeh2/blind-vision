@@ -157,7 +157,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- Product Demonstration -->
 ## Product Demonstration
 
-Here is a video demonstrating how our products work: [Blind Vision Demonstration]()
+Here is a video demonstrating how our products work: [Blind Vision Demonstration](https://drive.google.com/file/d/1cYQlzCVtrWo57RDogcXgDTrOfJF4kutX/view)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
