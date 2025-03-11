@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import 'react-native-get-random-values';
 import { StyleSheet, View, Dimensions, TouchableOpacity, Text, Platform } from 'react-native';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import MapView, { Marker, PROVIDER_GOOGLE, Polyline } from 'react-native-maps';
+import React, { useEffect, useRef, useState } from 'react';
+import { AccessibilityInfo } from 'react-native';
 import * as Location from 'expo-location';
 import * as Speech from 'expo-speech';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-
 
 type RegionType = {
   latitude: number;
@@ -23,13 +24,18 @@ type LocationCoords = {
   speed: number | null;
 };
 
-export default function MapsScreen() {
+export default function Maps() {
   const [region, setRegion] = useState<RegionType | null>(null);
   const [location, setLocation] = useState<LocationCoords | null>(null);
   const [destination, setDestination] = useState<{ latitude: number; longitude: number } | null>(null);
   const [overviewCoordinates, setOverviewCoordinates] = useState<{ latitude: number; longitude: number }[]>([]);
   const mapRef = useRef<MapView>(null);
 
+  const checkAccessibility = (speechCallback: () => void) => {
+    AccessibilityInfo.isScreenReaderEnabled().then((enabled) => { 
+      if(enabled) { speechCallback(); } 
+    });
+  }
 
   useEffect(() => {
     (async () => {
@@ -47,7 +53,7 @@ export default function MapsScreen() {
       };
       setLocation(loc.coords);
       setRegion(newRegion);
-      Speech.speak("Location updated.");
+      checkAccessibility(() => Speech.speak("Location updated."));
     })();
   }, []);
 
@@ -55,7 +61,7 @@ export default function MapsScreen() {
   const recenterMap = () => {
     if (mapRef.current && region) {
       mapRef.current.animateToRegion(region, 1000);
-      Speech.speak("Recentered on your current location.");
+      checkAccessibility(() => Speech.speak("Recentered on your current location."));
     }
   };
 
@@ -126,16 +132,16 @@ export default function MapsScreen() {
         if (route.polyline && route.polyline.encodedPolyline) {
           const decoded = decodePolyline(route.polyline.encodedPolyline);
           setOverviewCoordinates(decoded);
-          Speech.speak("Destination set. Start moving to receive instructions for navigation.");
+          checkAccessibility(() => Speech.speak("Destination set. Start moving to receive instructions for navigation."));
         } else {
-          Speech.speak("No route polyline found.");
+          checkAccessibility(() => Speech.speak("No route polyline found."));
         }
       } else {
-        Speech.speak("No route found.");
+        checkAccessibility(() => Speech.speak("No route found."));
       }
     } catch (error) {
       console.error("Error fetching directions:", error);
-      Speech.speak("Error fetching directions.");
+      checkAccessibility(() => Speech.speak("Error fetching directions."));
     }
   };
 
