@@ -4,6 +4,7 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import MapView, { Marker, PROVIDER_GOOGLE, Polyline } from 'react-native-maps';
 import React, { useEffect, useRef, useState } from 'react';
 import { AccessibilityInfo } from 'react-native';
+import { API_URL, API_KEY } from '@global/env';
 import * as Location from 'expo-location';
 import * as Speech from 'expo-speech';
 
@@ -30,6 +31,8 @@ export default function Maps() {
   const [destination, setDestination] = useState<{ latitude: number; longitude: number } | null>(null);
   const [overviewCoordinates, setOverviewCoordinates] = useState<{ latitude: number; longitude: number }[]>([]);
   const mapRef = useRef<MapView>(null);
+
+  console.log("Maps:", API_KEY, API_URL)
 
   const checkAccessibility = (speechCallback: () => void) => {
     AccessibilityInfo.isScreenReaderEnabled().then((enabled) => { 
@@ -100,10 +103,7 @@ export default function Maps() {
   const fetchDirections = async (
     origin: { latitude: number; longitude: number },
     dest: { latitude: number; longitude: number }
-  ) => {
-    const apiKey = 'AIzaSyAnPlxOPLt5E2JYZVcT83gD3IQ7yuJGaOM'; 
-    const url = 'https://routes.googleapis.com/directions/v2:computeRoutes';
-    
+  ) => {    
     const requestBody = {
       origin: {
         location: { latLng: { latitude: origin.latitude, longitude: origin.longitude } },
@@ -115,11 +115,11 @@ export default function Maps() {
     };
 
     try {
-      const response = await fetch(url, {
+      const response = await fetch(process.env.EXPO_PUBLIC_API_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Goog-Api-Key': apiKey,
+          'X-Goog-Api-Key': process.env.EXPO_PUBLIC_API_KEY,
           'X-Goog-FieldMask': 'routes.distanceMeters,routes.duration,routes.polyline.encodedPolyline'
         },
         body: JSON.stringify(requestBody),
@@ -211,7 +211,7 @@ export default function Maps() {
         }}
         onFail={(error) => console.log("Places error:", error)}
         query={{
-          key: 'AIzaSyAnPlxOPLt5E2JYZVcT83gD3IQ7yuJGaOM',
+          key: process.env.EXPO_PUBLIC_API_KEY,
           language: 'en',
         }}
         fetchDetails={true}

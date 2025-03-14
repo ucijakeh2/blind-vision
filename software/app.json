@@ -30,12 +30,7 @@
         "android.permission.BLUETOOTH_SCAN",
         "android.permission.BLUETOOTH_CONNECT"
       ],
-      "package": "com.tuthanhhuy2124.blindvisionapp",
-      "config": {
-        "googleMaps": {
-          "apiKey": "AIzaSyAnPlxOPLt5E2JYZVcT83gD3IQ7yuJGaOM"
-        }
-      }
+      "package": "com.tuthanhhuy2124.blindvisionapp"
     },
     "web": {
       "bundler": "metro",
